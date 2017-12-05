@@ -1,7 +1,7 @@
 # netopro
 
 ## 超雑なイメージ
-![image](https://user-images.githubusercontent.com/12966452/33558822-3f00945c-d94e-11e7-85e9-68f4c0f4b4c5.png)
+![image](https://user-images.githubusercontent.com/12966452/33593175-7be9218a-d9d1-11e7-984c-262fda940d70.png)
 
 ## 参加する
 ### Client.join
