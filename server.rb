@@ -3,10 +3,11 @@ require 'json'
 require './player.rb'
 
 class Server
-  # 参加上限数
-  JOIN_LIMIT = 2.freeze
   # 色のマップリスト。とりあえずサーバが持ってます
   COLOR = { white: -1, black: 1 }.freeze
+
+  # 参加上限数
+  JOIN_LIMIT = COLOR.length.freeze
 
   attr_reader :port
 
@@ -41,7 +42,7 @@ class Server
 
   # 参加上限に達しているか
   def is_join_limit?
-    @players.length >= MAX_PLAYER
+    @players.length >= JOIN_LIMIT
   end
 
   # プレイヤーが参加したとき
