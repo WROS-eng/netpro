@@ -1,0 +1,32 @@
+@startuml 雑イメージ
+participant Client
+participant Server
+participant GameController
+
+GameController -> GameController : Create GameController
+Server -> Server : Create Server
+
+loop ２人揃うまで
+     Server -> Server : accept
+     Client -> Client : Create Client
+     Client -> Server : TCPSocket.open("localhost",20000)
+     
+     Client -> Server : join { username }
+     Server -> GameController : @players.push(Player.new)
+     Server --> Client : on_join { username, color }
+end
+
+Server -> GameController : ゲーム開始
+GameController -> Server : 各プレイヤーの手番教える
+Server -> Client : プレイヤーの手番通知
+
+loop ゲーム終わるまで
+
+    Client -> Server : 打つ/play { color, x, y }
+    Server -> GameController : 指した位置反映
+    Server --> Client : resoponse { status :ok }
+
+    GameController -> Server : 盤面情報取得 
+    Server -> Client : 盤面情報送信 
+end
+@enduml
