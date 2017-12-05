@@ -11,14 +11,15 @@ loop ２人揃うまで
      Client -> Client : Create Client
      Client -> Server : TCPSocket.open("localhost",20000)
      
-     Client -> Server : join { username }
-     Server -> GameController : @players.push(Player.new)
-     Server --> Client : on_join { username, color }
+     Client -> Server : join 
+     Server -> GameController : gc.register_player
+     Server --> Client : on_join
 end
 
-Server -> GameController : ゲーム開始
-GameController -> Server : 各プレイヤーの手番教える
-Server -> Client : プレイヤーの手番通知
+Server -> GameController : ゲーム開始 gc.start_game
+GameController -> Server : 各プレイヤーの手番教える orders
+Server -> Client : プレイヤーの手番通知 noti_start_game
+Client --> Server :  on_noti_start_game
 
 loop ゲーム終わるまで
 
