@@ -1,19 +1,14 @@
 require "socket"
 require 'json'
 require './player.rb'
+require './game_controller.rb'
 
 class Server
-  # 色のマップリスト。とりあえずサーバが持ってます
-  COLOR = { white: -1, black: 1 }.freeze
-
-  # 参加上限数
-  JOIN_LIMIT = COLOR.length.freeze
 
   attr_reader :port
 
   # サーバ初期化処理
   def initialize
-    @players = []
     begin
       # 20000番のポートを解放
       @port = TCPServer.open(20000)
@@ -40,15 +35,26 @@ class Server
     p @port.gets.chomp
   end
 
-  # 参加上限に達しているか
-  def is_join_limit?
-    @players.length >= JOIN_LIMIT
+  # ゲーム開始通知
+  # turn : 手番
+  # player : プレイヤー情報
+  def noti_start_game(turn, player)
+    request = {turn: turn, color: player.color}
+    player.socket.puts(JSON.generate(request))
+  end
+
+  # 盤面情報通知
+  # socket : 接続したソケットインスタンス
+  def noti_bord_info(socket)
+    request = {}
+    socket.puts(JSON.generate(request))
   end
 
   # プレイヤーが参加したとき
   # socket : 接続したソケットインスタンス
+  # gc : ゲームコントローラインスタンス
   # return is_join : 参加に成功したか
-  def on_join(socket)
+  def on_join(socket, gc)
     begin
       # 受信
       request = socket.gets.chomp
@@ -58,9 +64,7 @@ class Server
       result = JSON.parse(request)
 
       # プレイヤー作成
-      color = @players.length == 0 ? COLOR[:white] : COLOR[:black]
-      player = Player.new( result["username"], color )
-      @players.push(player)
+      player = gc.register_player(result["username"], socket)
 
       # 成功
       response = { status: 200, id: player.id, username: player.username, color: player.color }
@@ -78,40 +82,40 @@ class Server
   end
 
   # プレイヤーが指した時
-  # def on_play(socket)
-  #   request = socket.gets.chomp
-  #   puts request
-  #
-  #   result = JSON.parse(request)
-  #
-  # end
+  # socket : 接続したソケットインスタンス
+  def on_play(socket)
+    request = socket.gets.chomp
+    puts request
+
+    result = JSON.parse(request)
+
+  end
 
 end
 
 # =============== ここから下にmain処理書く ===================
 
+# ゲームコントローラ作成
+gc = GameController.new
+
 # サーバ作成
 server = Server.new
 
-# 通信受付開始
-loop do
-  if server.is_join_limit?
-    puts "参加上限に達しました。"
-    break
-  end
-
+# 参加受付開始
+until gc.is_join_limit? do
   # 接続待機
   socket = server.port.accept
 
   # プレイヤー参加処理
-  server.on_join(socket)
+  server.on_join(socket, gc)
+end
+puts "参加上限に達しました。"
 
-  # Thread.start(socket) do |client|
-  #   loop do
-  #     print socket.gets.chomp
-  #
-  #   end
-  #   client.close
-  # end
+# ゲーム開始通知
+orders = gc.start_game
+
+# 各プレイヤーへ開始通知
+orders.map do |turn, player|
+  server.noti_start_game(turn, player)
 end
 
