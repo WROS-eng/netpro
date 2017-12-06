@@ -16,9 +16,8 @@ class GameController
   end
 
   # プレイヤーの登録
-  def register_player(username, socket)
-    color = @players.length == 0 ? COLOR[:white] : COLOR[:black]
-    player = Player.new( username, color, socket)
+  def register_player(username)
+    player = Player.new(username)
     @players.push(player)
     return player
   end
@@ -29,9 +28,11 @@ class GameController
   end
 
   # ゲームを開始させる
+  # return : 手番マップ
   def start_game
     @turn = 1
     @players.shuffle!
+    @players.each_with_index { |player, i| player.register_color(COLOR.values[i]) }
     @orders = {first: @players[0], second: @players[1] }
   end
 end

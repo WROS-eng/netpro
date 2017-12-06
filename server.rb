@@ -39,7 +39,7 @@ class Server
   # turn : 手番
   # player : プレイヤー情報
   def noti_start_game(turn, player)
-    request = {turn: turn, color: player.color}
+    request = {turn: turn, id: player.id, username: player.username, color: player.color}
     player.socket.puts(JSON.generate(request))
   end
 
@@ -64,10 +64,11 @@ class Server
       result = JSON.parse(request)
 
       # プレイヤー作成
-      player = gc.register_player(result["username"], socket)
+      player = gc.register_player(result["username"])
+      player.register_socket(socket)
 
       # 成功
-      response = { status: 200, id: player.id, username: player.username, color: player.color }
+      response = { status: 200, message: "Succeeded join" }
       is_join = true
 
     rescue => e
@@ -111,7 +112,7 @@ until gc.is_join_limit? do
 end
 puts "参加上限に達しました。"
 
-# ゲーム開始通知
+# GameControllerへゲーム開始通知依頼
 orders = gc.start_game
 
 # 各プレイヤーへ開始通知
