@@ -27,21 +27,21 @@
 ### response
 `Server.on_join`
 
-| フィールド    | タイプ  | 説明          |
-|----------|------|-------------|
-| status   | 数値   | 通信成否        |
-| id       | UUID | プレイヤーid     |
-| username | 文字列  | プレイヤー名      |
-| color    | 数値   | 色 (-1 or 1) |
+| フィールド   | タイプ | 説明      |
+|---------|-----|---------|
+| status  | 数値  | 通信成否    |
+| message | 文字列 | 参加成功可否文 |
 
 ## ゲーム開始通知
 ### request
 `Server.noti_start_game`
 
-| フィールド | タイプ | 説明                   |
-|-------|-----|----------------------|
-| turn  | 文字列 | 手番 (first or second) |
-| color | 数値  | 色 (-1 or 1)          |
+| フィールド    | タイプ  | 説明                   |
+|----------|------|----------------------|
+| turn     | 文字列  | 手番 (first or second) |
+| id       | UUID | プレイヤーid              |
+| username | 文字列  | プレイヤー名               |
+| color    | 数値   | 色 (-1 or 1)          |
 
 ### response
 `Client.on_noti_start_game`
