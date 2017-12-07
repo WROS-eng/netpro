@@ -9,7 +9,7 @@ class Board
   FIELD = COLOR.merge({none: 0}).freeze
 
   # format用絵文字マップリスト
-  MARK = { white: "●", black: "○", none: "□" }.freeze
+  MARK = { white: "○", black: "●", none: "□" }.freeze
 
   # 1辺のマス数
   SQUARES = 8.freeze
