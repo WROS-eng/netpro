@@ -1,0 +1,83 @@
+@startuml 雑なクラス図
+
+class "Client" as Client {
+      port: TCPServer
+      
+      initialize()
+      close()
+      send(msg)
+      receive()
+      join()
+      on_game_start()
+}
+Server -left- Client
+note on link
+      通信を行う関係
+end note
+
+class "Server" as Server {
+      port: TCPServer
+      
+      initialize()
+      close()
+      send(msg)
+      receive()
+      noti_start_game(turn, player)
+      noti_board_info(socket, board_info)
+      on_join(socket, gc)
+      on_play(socket, gc)
+}
+Server ..> GameController
+note on link
+      ゲーム状態など
+      問い合わせる関係
+end note
+
+class "GameController" as GameController {
+      turn: int
+      join_limit: int
+      
+      initialize()
+      register_player(username)
+      is_join_limit?()
+      start_game()
+      is_finished_game?()
+      write_board_info(x, y, color)
+      get_board_info()
+      on_turn_start()
+      on_turn_end()
+}
+note left
+      ゲームの状態を扱う。
+      ゲームの初期化も行うよ。
+      ゲームマスター的な役割
+end note 
+GameController --> "1" Board : board
+GameController --> "*" Player : players[]
+
+class "Board" as Board {
+      COLOR: Hash
+      FIELD: Hash
+      MARK: Hash
+      SQUARES: int
+      field: Array
+      
+      initialize()
+      reset()
+      pretty_print()
+}
+note left : ボード情報を扱う
+
+class "Player" as Player {
+      id: UUID
+      username: string
+      socket: TCPServer
+      color: int
+      
+      initialize()
+      register_socket()
+      register_color()
+}
+note left : プレイヤー情報を扱う
+
+@enduml

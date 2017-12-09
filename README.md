@@ -15,6 +15,9 @@
 - Serverはそれを各Clientへ送る
 - 受け取ったClientはそれを表示
 
+## 雑なクラス図
+![image](https://user-images.githubusercontent.com/12966452/33793640-3ebc8754-dcfe-11e7-8032-7a3bcc541455.png)
+
 
 ## 参加する
 ### request
