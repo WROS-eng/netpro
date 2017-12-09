@@ -28,5 +28,22 @@ class Client
     p @port.gets
   end
 
+  def join
+    puts "プレイヤー名を入力してください"
+    username = "player1"
+    loop do
+      username = gets.to_s.chomp
+      break if username.length > 0
+      puts "１文字以上で入力して下さい"
+    end
+    send(JSON.generate({username: username}))
+    receive
+  end
 
+  def on_game_start
+    json = receive
+    payload = JSON.parse(json)
+    p payload
+    p "色:#{payload["color"]} #{payload["username"]}さんは#{payload["turn"]}番です。"
+  end
 end
