@@ -1,7 +1,5 @@
 require "socket"
 require 'json'
-require './player.rb'
-require './game_controller.rb'
 
 class Server
 
@@ -43,11 +41,9 @@ class Server
     player.socket.puts(JSON.generate(request))
   end
 
-  # 盤面情報通知
-  # socket : 接続したソケットインスタンス
-  def noti_bord_info(socket)
+  def noti_board_info(socket, board_info)
     request = {}
-    socket.puts(JSON.generate(request))
+    player.socket.puts(JSON.generate(request))
   end
 
   # プレイヤーが参加したとき
@@ -84,39 +80,30 @@ class Server
 
   # プレイヤーが指した時
   # socket : 接続したソケットインスタンス
-  def on_play(socket)
-    request = socket.gets.chomp
-    puts request
+  # gc : ゲームコントローラインスタンス
+  # return is_play : 指すのに成功したか
+  def on_play(socket, gc)
+    begin
+      request = socket.gets.chomp
+      puts request
 
-    result = JSON.parse(request)
+      payload = JSON.parse(request)
 
+      # 指した位置を反映
+      gc.write_board_info(payload["x"], payload["y"], payload["color"])
+
+      # 成功
+      response = { status: 200, message: "Succeeded play" }
+      is_play = true
+
+    rescue => e
+      # 失敗
+      response = { status: 600, message: "Failed play", error: e.message }
+      is_play = false
+    ensure
+      socket.puts(JSON.generate(response))
+      return is_play
+    end
   end
-
-end
-
-# =============== ここから下にmain処理書く ===================
-
-# ゲームコントローラ作成
-gc = GameController.new
-
-# サーバ作成
-server = Server.new
-
-# 参加受付開始
-until gc.is_join_limit? do
-  # 接続待機
-  socket = server.port.accept
-
-  # プレイヤー参加処理
-  server.on_join(socket, gc)
-end
-puts "参加上限に達しました。"
-
-# GameControllerへゲーム開始通知依頼
-orders = gc.start_game
-
-# 各プレイヤーへ開始通知
-orders.map do |turn, player|
-  server.noti_start_game(turn, player)
 end
 

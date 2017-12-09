@@ -1,4 +1,5 @@
 require "socket"
+require 'json'
 
 class Client
   TAG = "[Client]".freeze
@@ -26,13 +27,6 @@ class Client
   def receive()
     p @port.gets
   end
-end
 
-client = Client.new
 
-loop do
-  #送信内容の入力
-  puts "メッセージを入力してください"
-  msg = gets.to_s
-  client.send "#{msg}"
 end
