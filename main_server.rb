@@ -1,5 +1,4 @@
 require './server.rb'
-require './player.rb'
 require './game_controller.rb'
 
 # ゲームコントローラ作成
@@ -20,21 +19,24 @@ puts "参加上限に達しました。"
 
 # GameControllerへゲーム開始通知依頼
 orders = gc.start_game
-p orders
 
 # 各プレイヤーへ開始通知
-orders.map do |turn, player|
-  server.noti_start_game(turn, player)
-end
+orders.map {|turn_order, p| server.noti_start_game(p.socket, turn_order, p.id, p.username, p.color) }
 
 # ゲームが終わるまで手番ループ
 # until gc.is_finished_game? do
 #   gc.players.each do |player|
 #     # ターン開始
-#     gc.on_turn_start
+#     turn_count, play_index, _ = gc.on_turn_start
+#
+#     # 各プレイヤーに手番かどうかを送る
+#     gc.players.each_with_index do |p, i|
+#       is_play_turn = (i == play_index)
+#       server.noti_play_turn(p.socket, turn_count, is_play_turn)
+#     end
 #
 #     # 指し指令受取待ち
-#     on_play(player.socket)
+#     server.on_play(player.socket, gc)
 #
 #     # 盤面情報取得
 #     board_info = gc.get_board_info

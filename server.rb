@@ -34,11 +34,23 @@ class Server
   end
 
   # ゲーム開始通知
+  # socket : 接続したソケットインスタンス
   # turn : 手番
-  # player : プレイヤー情報
-  def noti_start_game(turn, player)
-    request = {turn: turn, id: player.id, username: player.username, color: player.color}
-    player.socket.puts(JSON.generate(request))
+  # id : プレイヤーid
+  # username : プレイヤー名
+  # color : プレイヤーの使う色
+  def noti_start_game(socket, turn_order, id, username, color)
+    request = {turn_order: turn_order, id: id, username: username, color: color}
+    socket.puts(JSON.generate(request))
+  end
+
+  # 手番かどうかを通知する
+  # socket : 接続したソケットインスタンス
+  # turn_count : ターン数
+  # is_play_turn : 手番かどうか
+  def noti_play_turn(socket, turn_count, is_play_turn)
+    request = {turn_count: turn_count, is_play_turn: is_play_turn}
+    socket.puts(JSON.generate(request))
   end
 
   def noti_board_info(socket, board_info)

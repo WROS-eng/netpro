@@ -44,6 +44,6 @@ class Client
     json = receive
     payload = JSON.parse(json)
     p payload
-    p "色:#{payload["color"]} #{payload["username"]}さんは#{payload["turn"]}番です。"
+    p "色:#{payload["color"]} #{payload["username"]}さんは#{payload["turn_order"]}番です。"
   end
 end

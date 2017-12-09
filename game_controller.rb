@@ -1,3 +1,4 @@
+require './player.rb'
 require './board.rb'
 
 # ゲームを管理するコントローラ
@@ -56,7 +57,12 @@ class GameController
   end
 
   def on_turn_start
+    puts "#{@turn}ターン目"
     # 置けるか確認
+    can_put_stone = true
+    # 手番の人の配列インデックス計算
+    play_index = (@turn-1) % @players.length
+    return @turn, play_index, can_put_stone
   end
 
   def on_turn_end
