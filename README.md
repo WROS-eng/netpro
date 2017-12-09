@@ -23,33 +23,33 @@
 #### Parameters
 `Client.join`
 
-| フィールド    | タイプ | 説明     |
+| Name    | Type | Description     |
 |----------|-----|--------|
-| username | 文字列 | プレイヤー名 |
+| `username` | `string` | プレイヤー名 |
 
 #### Response
 `Server.on_join`
 
-| フィールド   | タイプ | 説明      |
+| Name   | Type | Description      |
 |---------|-----|---------|
-| status  | 数値  | 通信成否    |
-| message | 文字列 | 参加成功可否文 |
+| `status`  | `int`  | 通信成否    |
+| `message` | `string` | 参加成功可否文 |
 
 ## ゲーム開始通知
 #### Parameters
 `Server.noti_start_game`
 
-| フィールド        | タイプ  | 説明                   |
-|--------------|------|----------------------|
-| `turn_order` | `string`  | 手番 (first or second) |
-| `id`           | `string` | プレイヤーid              |
-| `username`     | `string`  | プレイヤー名               |
-| `color`        | `int`   | 色 (-1 or 1)          |
+| Name        | Type      | Description                   |
+|--------------|----------|----------------------|
+| `turn_order` | `string` | 手番 (first or second) |
+| `id`         | `string` | プレイヤーid              |
+| `username`   | `string` | プレイヤー名               |
+| `color`      | `int`    | 色 (-1 or 1)          |
 
 #### Response
 `Client.on_noti_start_game`
 
-| フィールド | タイプ | 説明  |
+| Name | Type | Description  |
 |-------|-----|-----|
 |       |     |     |
 
@@ -58,14 +58,14 @@
 #### Parameters
 `Server.noti_play_turn`
 
-| フィールド        | タイプ  | 説明                   |
-|--------------|------|----------------------|
-| `turn_count`   | `string`  | ターン数 |
-| `is_play_turn` | `bool` | 手番かどうか              |
+| Name          | Type      | Description     |
+|----------------|----------|--------|
+| `turn_count`   | `string` | ターン数   |
+| `is_play_turn` | `bool`   | 手番かどうか |
 
 #### Response
 `Client.on_noti_play_turn`
 
-| フィールド | タイプ | 説明  |
+| Name | Type | Description  |
 |-------|-----|-----|
 |       |     |     |
