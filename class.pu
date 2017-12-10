@@ -1,4 +1,4 @@
-@startuml 雑なクラス図
+@startuml image
 
 class "Client" as Client {
       port: TCPServer
@@ -14,6 +14,27 @@ Server -left- Client
 note on link
       通信を行う関係
 end note
+
+class "PlayerData" as PlayerData {
+      username: string
+      color: int
+}
+Client --> "1" PlayerData : player_data
+note left
+      クライアントの
+      プレイヤー情報を扱う
+end note 
+
+class "ClientBoard" as ClientBoard {
+      field: Array
+
+      is_can_put(x, y, color)
+}
+PlayerData --> "1" ClientBoard : client_board
+note left
+      クライアントの
+      ボード情報を扱う
+end note 
 
 class "Server" as Server {
       port: TCPServer

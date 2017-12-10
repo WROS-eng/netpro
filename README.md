@@ -16,7 +16,9 @@
 - 受け取ったClientはそれを表示
 
 ## 雑なクラス図
-![image](https://user-images.githubusercontent.com/12966452/33793640-3ebc8754-dcfe-11e7-8032-7a3bcc541455.png)
+![image](https://www.plantuml.com/plantuml/png/lLLHJnD147w_Nx7fKp4jYQ_tW6119M90a2TZBckxFLQkTytk5gt6XEw1AKAYCH4JH0NY2yPemCI4HCEFMQx8lt3lRkzk3uheYqsJtinEP-URxvkvOSeWOQs60t03siWmgWwa51Gg3aOkAm18GVm8dXWW-ZGzmanmfp8rWyW28ighVh2B6OOEVeoA0yfLTJoQMHIvjMA3sebDK1NXXUpyWOVTrF1SouODP4KrIkzJ8xuJb1rKPsLLcU5w3CbOu61tNltpP77Zw71Ry5U_jjT4vzd9-ixH8JVatI0CJb5EER2Do2XaC4AQcIdQ5aN4bJMOW3A2NJi1vJaUCILS9ejI3IgNXq3XSa7FOe9cP5WrQSLrXfMh989_5Vwku1y5tn7-D-5tHUTBSkQ_4VxdyCoNtnyzVpdOsfDuUYjx4a-A19mYxAe7IKrZBR9JC7MCd9e9HWY1RIDXZ5fLw5hD5Yi-Ae5sAOOMzbh3aK3JavgIsT2oxeVcFuBRb9Y4lt8nh9Zm297Y_l_eK5Q1Ozr54Yoo5d5BYirSJ8JUmcxTArAlEezO2MGkJSYHi9C8kwgTX4bp9wdC1mU7m7LvUyLp6V4SHwBietN1zwDkRXq__zvRNXMTJwApgyw2roz4PobusHLSFhmLVFMyKSZV4pKyxqeR7xOYbdusifQ36vZftlE98CZ6bCcXYBjPJ4Pi85Dabl9AnbX6XXPPbnVGELIB3hBWXmGpf7EJqtOSOoEcHsYCX0ZJfPFtXh896JehTqM2LBdY8L6rMEHzWeBkkzxcXs1jNN0UBod1k_r2_VU27mX-ACtZZIN9Rl3p85ZPrsRb54_9i2PZ6izdlw1BoR9A5nMzUozLHBPBybkaCZanEMs26v3EAS-ryR69qPpdriZqpPnZvlRioFJOZAwGt3QwM3GKPMmq2MAiRJNbHcPvEYIISxTBVkjh6p-5XcKzixFZetzU_l6idjqzsalXhsSWpdNM7-Ng0-sFRmLZM8f2lij_0m00 "image")
+
+
 
 
 ## 参加する
@@ -62,6 +64,7 @@
 |----------------|----------|--------|
 | `turn_count`   | `string` | ターン数   |
 | `is_play_turn` | `bool`   | 手番かどうか |
+| `is_finish_game` | `bool`   | ゲームが終了したかどうか |
 
 #### Response
 `Client.on_noti_play_turn`
