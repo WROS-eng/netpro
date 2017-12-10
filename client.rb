@@ -3,7 +3,7 @@ require 'json'
 
 class Client
   TAG = "[Client]".freeze
-  attr_reader :port
+  attr_reader :port, :player_client
 
   def initialize()
     begin
@@ -45,5 +45,9 @@ class Client
     payload = JSON.parse(json)
     p payload
     p "色:#{payload["color"]} #{payload["username"]}さんは#{payload["turn_order"]}番です。"
+    #player_clientnの作成
+    player_client = Player_Client.new(payload["username"]}, payload["color"])
   end
+
+  
 end
