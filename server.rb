@@ -48,14 +48,17 @@ class Server
   # socket : 接続したソケットインスタンス
   # turn_count : ターン数
   # is_play_turn : 手番かどうか
-  def noti_play_turn(socket, turn_count, is_play_turn)
-    request = {turn_count: turn_count, is_play_turn: is_play_turn}
+  def noti_play_turn(socket, turn_count, is_play_turn, is_finish_game)
+    request = {turn_count: turn_count, is_play_turn: is_play_turn, is_finish_game: is_finish_game}
     socket.puts(JSON.generate(request))
   end
 
+  # ボード情報を通知する
+  # socket : 接続したソケットインスタンス
+  # board_info : ボード情報
   def noti_board_info(socket, board_info)
-    request = {}
-    player.socket.puts(JSON.generate(request))
+    request = {board_info: board_info}
+    socket.puts(JSON.generate(request))
   end
 
   # プレイヤーが参加したとき
@@ -101,8 +104,18 @@ class Server
 
       payload = JSON.parse(request)
 
-      # 指した位置を反映
-      gc.write_board_info(payload["x"], payload["y"], payload["color"])
+      # プレイヤーの行動を反映
+      case payload["input_type"]
+        # 指した位置を反映
+        when "PUT" then
+          gc.write_board_info(payload["x"], payload["y"], payload["color"])
+        # # パスを記録
+        # when "PASS" then
+        # # ゲームを終了
+        # when "RETIRE" then
+        else
+          puts "未定義の行動です。"
+      end
 
       # 成功
       response = { status: 200, message: "Succeeded play" }

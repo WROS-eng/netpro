@@ -27,13 +27,10 @@ orders.map {|turn_order, p| server.noti_start_game(p.socket, turn_order, p.id, p
 # until gc.is_finished_game? do
 #   gc.players.each do |player|
 #     # ターン開始
-#     turn_count, play_index, _ = gc.on_turn_start
+#     turn_count, _ = gc.on_turn_start
 #
 #     # 各プレイヤーに手番かどうかを送る
-#     gc.players.each_with_index do |p, i|
-#       is_play_turn = (i == play_index)
-#       server.noti_play_turn(p.socket, turn_count, is_play_turn)
-#     end
+#     gc.players.each {|p| server.noti_play_turn(p.socket, turn_count, is_play_turn: (p.id == player.id), is_finish_game: false)}
 #
 #     # 指し指令受取待ち
 #     server.on_play(player.socket, gc)
