@@ -1,6 +1,7 @@
 require "socket"
 require 'json'
 require "./client_player.rb"
+require "./client_board.rb"
 
 class Client
   TAG = "[Client]".freeze
@@ -28,25 +29,14 @@ class Client
   def receive()
     p @port.gets
   end
-
-  def join
-    puts "プレイヤー名を入力してください"
-    username = "player1"
-    loop do
-      username = gets.to_s.chomp
-      break if username.length > 0
-      puts "１文字以上で入力して下さい"
-    end
-    send(JSON.generate({username: username}))
-    receive
-  end
-
+  
+  
   def on_noti_start_game
     json = receive
     payload = JSON.parse(json)
     p payload
     p "色:#{payload["color"]} #{payload["username"]}さんは#{payload["turn_order"]}番です。"
-    @client_player = Client_Player.new("test", 1)
+    @client_player = Client_Player.new(payload["username"], payload["color"])
   end
 
   def on_noti_play_turn
@@ -72,6 +62,22 @@ class Client
     send(json)
   end
 
+  def on_noti_board_info
+  end
+  
+  def join
+    puts "プレイヤー名を入力してください"
+    username = "player1"
+    loop do
+      username = gets.to_s.chomp
+      break if username.length > 0
+      puts "１文字以上で入力して下さい"
+    end
+    send(JSON.generate({username: username}))
+    receive
+  end
+
+
    def play(turn_data)
     if turn_data["is_play_turn"]
       puts "自分のターンです。置きたい場所を入力してください。"
@@ -95,5 +101,6 @@ class Client
       puts "相手ターンです"
     end
   end
+
 
 end
