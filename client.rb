@@ -1,9 +1,10 @@
 require "socket"
 require 'json'
+require "./client_player.rb"
 
 class Client
   TAG = "[Client]".freeze
-  attr_reader :port, :player_client
+  attr_reader :port, :client_player
 
   def initialize()
     begin
@@ -40,14 +41,59 @@ class Client
     receive
   end
 
-  def on_game_start
+  def on_noti_start_game
     json = receive
     payload = JSON.parse(json)
     p payload
     p "色:#{payload["color"]} #{payload["username"]}さんは#{payload["turn_order"]}番です。"
-    #player_clientnの作成
-    player_client = Player_Client.new(payload["username"]}, payload["color"])
+    @client_player = Client_Player.new("test", 1)
   end
 
-  
+  def on_noti_play_turn
+    json = receive
+    payload = JSON.parse(json)
+    p "#{payload["turn_count"]}ターン目です。"
+    return payload
+   end
+
+  def send_storn_pos(input_data,turn_type)
+    json = ""
+    case turn_type
+    when 'RETIRE' 
+      json = JSON.generate({input_type:"RETIRE"})
+    when 'PASS'
+      json = JSON.generate({input_type:"PASS"})
+    when 'PUT'
+      pos = input_data.chars
+      json = JSON.generate({x:pos[0],y:pos[1],input_type:"PUT",color:client_player.color})
+    else
+      puts "不正な値が入っています:client.rb -> send_stone_pos"
+    end
+    send(json)
+  end
+
+   def play(turn_data)
+    if turn_data["is_play_turn"]
+      puts "自分のターンです。置きたい場所を入力してください。"
+      input = "xy"
+      #ここに置けるかどうかの判定を入れる
+      loop do
+        input = gets.to_s.chomp
+        #２文字、整数のみの判定 https://qiita.com/pecotech26/items/ee392125727f04bafaed
+        if input.length == 2 && input =~ /^[0-9]+$/  
+          send_storn_pos(input,"PUT")
+          break 
+        end
+        #qが押されたら終了処理
+        if input.eql?("q")
+          send_storn_pos(input,"finishe")
+          break 
+        end
+        puts "error"
+      end 
+    else
+      puts "相手ターンです"
+    end
+  end
+
 end
