@@ -46,7 +46,7 @@ class Client
     return payload
    end
 
-  def send_storn_pos(input_data,turn_type)
+  def create_stone_pos_json(input_data,turn_type)
     json = ""
     case turn_type
     when 'RETIRE' 
@@ -59,7 +59,7 @@ class Client
     else
       puts "不正な値が入っています:client.rb -> send_stone_pos"
     end
-    send(json)
+    return json
   end
 
   def on_noti_board_info
@@ -87,12 +87,14 @@ class Client
         input = gets.to_s.chomp
         #２文字、整数のみの判定 https://qiita.com/pecotech26/items/ee392125727f04bafaed
         if input.length == 2 && input =~ /^[0-9]+$/  
-          send_storn_pos(input,"PUT")
+          json = create_stone_pos_json(input,"PUT")
+          send(json)
           break 
         end
         #qが押されたら終了処理
         if input.eql?("q")
-          send_storn_pos(input,"finishe")
+          json = create_stone_pos_json(input,"finishe")
+          send(json)
           break 
         end
         puts "error"
