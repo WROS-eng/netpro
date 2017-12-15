@@ -32,18 +32,26 @@ class Client
   
   
   def on_noti_start_game
-    json = receive
-    payload = JSON.parse(json)
-    p payload
-    p "色:#{payload["color"]} #{payload["username"]}さんは#{payload["turn_order"]}番です。"
-    @client_player = Client_Player.new(payload["username"], payload["color"])
+    begin 
+      json = receive
+      payload = JSON.parse(json)
+      p payload
+      p "色:#{payload["color"]} #{payload["username"]}さんは#{payload["turn_order"]}番です。"
+      @client_player = ClientPlayer.new(payload["username"], payload["color"])
+    rescue
+      puts "回線が貧弱なので、通信に失敗したンゴ☺️ :#{__method__}"
+    end
   end
 
   def on_noti_play_turn
-    json = receive
-    payload = JSON.parse(json)
-    p "#{payload["turn_count"]}ターン目です。"
-    return payload
+    begin
+      json = receive
+      payload = JSON.parse(json)
+      p "#{payload["turn_count"]}ターン目です。"
+      return payload
+    rescue
+      puts "回線が貧弱なので、通信に失敗したンゴ☺️ :#{__method__}"
+    end
    end
 
   def create_stone_pos_json(input_data,turn_type)
@@ -103,6 +111,4 @@ class Client
       puts "相手ターンです"
     end
   end
-
-
 end

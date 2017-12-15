@@ -1,4 +1,4 @@
-class Client_Player
+class ClientPlayer
     attr_reader :username, :color
     def initialize(username,color)
         @username = username 
