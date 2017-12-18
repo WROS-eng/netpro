@@ -32,8 +32,8 @@ class Client
   
   
   def on_noti_start_game
+    json = receive
     begin 
-      json = receive
       payload = JSON.parse(json)
       p payload
       p "色:#{payload["color"]} #{payload["username"]}さんは#{payload["turn_order"]}番です。"
@@ -44,8 +44,8 @@ class Client
   end
 
   def on_noti_play_turn
+    json = receive
     begin
-      json = receive
       payload = JSON.parse(json)
       p "#{payload["turn_count"]}ターン目です。"
       return payload

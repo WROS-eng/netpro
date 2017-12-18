@@ -48,7 +48,7 @@ class Server
   # socket : 接続したソケットインスタンス
   # turn_count : ターン数
   # is_play_turn : 手番かどうか
-  def noti_play_turn(socket, turn_count, is_play_turn, is_finish_game)
+  def noti_play_turn(socket, turn_count, is_play_turn:, is_finish_game:)
     request = {turn_count: turn_count, is_play_turn: is_play_turn, is_finish_game: is_finish_game}
     socket.puts(JSON.generate(request))
   end
