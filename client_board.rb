@@ -1,4 +1,4 @@
-class Client_Board
+class ClientBoard
     # attr_reader :field
     # def initialize
     #     @field = Array.new(SQUARES+2){Array.new(SQUARES+2,0)}
