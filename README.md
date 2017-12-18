@@ -37,6 +37,25 @@
 | `status`  | `int`  | 通信成否    |
 | `message` | `string` | 参加成功可否文 |
 
+## 打つ
+#### Parameters
+`Client.play`
+
+| Name    | Type | Description     |
+|----------|-----|--------|
+| `input_type` | `int` | プレイヤーの行動 |
+| `x` | `int` | 置いたx座標 |
+| `y` | `int` | 置いたy座標 |
+| `color` | `int` | 置いた石の色 |
+
+#### Response
+`Server.on_play`
+
+| Name   | Type | Description      |
+|---------|-----|---------|
+| `status`  | `int`  | 通信成否    |
+| `message` | `string` | 参加成功可否文 |
+
 ## ゲーム開始通知
 #### Parameters
 `Server.noti_start_game`
@@ -68,6 +87,25 @@
 
 #### Response
 `Client.on_noti_play_turn`
+
+| Name | Type | Description  |
+|-------|-----|-----|
+|       |     |     |
+
+## ボード情報の通知
+#### Parameters
+`Server.noti_board_info`
+
+| Name          | Type      | Description     |
+|----------------|----------|--------|
+| `board_info`   | `list` | ボード情報   |
+| `username` | `string`   | 行動したプレイヤー名 |
+| `input_type` | `int`   | プレイヤーの行動 |
+| `x` | `int`   | 置いたx座標 |
+| `y` | `int`   | 置いたy座標 |
+
+#### Response
+`Client.on_noti_board_info`
 
 | Name | Type | Description  |
 |-------|-----|-----|
