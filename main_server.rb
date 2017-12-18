@@ -40,7 +40,7 @@ until gc.is_finished_game? do
     board_info = input_type == System::InputType::PUT ? gc.get_board_info : []
 
     # 各プレイヤーに盤面情報送信
-    gc.players.each { |p| server.noti_board_info(p.socket, board_info, username: p.username, input_type: input_type, x: x, y: y) }
+    gc.players.each { |p| server.noti_board_info(p.socket, board_info, p.username, input_type, x: x, y: y) }
 
     # ターン終了
     gc.on_turn_end
