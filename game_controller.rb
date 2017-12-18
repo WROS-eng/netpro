@@ -1,5 +1,5 @@
 require './player.rb'
-require './board.rb'
+require './server_board.rb'
 
 # ゲームを管理するコントローラ
 class GameController
@@ -10,11 +10,12 @@ class GameController
   def initialize
     @turn = 0                          # ターン数
     @players = []                      # プレイヤーリスト
-    @board = Board.new                 # 盤面
-    @join_limit = Board::COLOR.length  # 参加上限数
+    @board = ServerBoard.new                 # 盤面
+    @join_limit = ServerBoard::COLOR.length  # 参加上限数
   end
 
   # プレイヤーの登録
+  # return : 登録プレイヤーインスタンス
   def register_player(username)
     player = Player.new(username)
     @players.push(player)
@@ -31,7 +32,7 @@ class GameController
   def start_game
     @turn = 1
     @players.shuffle!
-    @players.each_with_index { |player, i| player.register_color(Board::COLOR.values[i]) }
+    @players.each_with_index { |player, i| player.register_color(ServerBoard::COLOR.values[i]) }
     {first: @players[0], second: @players[1] }
   end
 
@@ -47,7 +48,7 @@ class GameController
   # x : x座標
   # y : y座標
   # color : コマの色
-  def write_board_info(x, y, color)
+  def set_board_info(x, y, color)
 
 
   end

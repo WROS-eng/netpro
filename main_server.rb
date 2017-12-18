@@ -30,7 +30,7 @@ until gc.is_finished_game? do
     turn_count, _ = gc.on_turn_start
 
     # 各プレイヤーに手番かどうかを送る
-    gc.players.each {|p| server.noti_play_turn(p.socket, turn_count,(p.id == player.id), false)}
+    gc.players.each {|p| server.noti_play_turn(p.socket, turn_count, is_play_turn: (p.id == player.id), is_finish_game: false)}
 
     # 指し指令受取待ち
     server.on_play(player.socket, gc)
