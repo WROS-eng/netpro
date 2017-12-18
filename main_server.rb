@@ -1,5 +1,6 @@
-require './server.rb'
 require './game_controller.rb'
+require './server.rb'
+require './system.rb'
 
 # ゲームコントローラ作成
 gc = GameController.new
@@ -33,13 +34,13 @@ until gc.is_finished_game? do
     gc.players.each {|p| server.noti_play_turn(p.socket, turn_count, is_play_turn: (p.id == player.id), is_finish_game: false)}
 
     # 指し指令受取待ち
-    server.on_play(player.socket, gc)
+    is_play, input_type, x, y = server.on_play(player.socket, gc)
 
     # 盤面情報取得
-    board_info = gc.get_board_info
+    board_info = input_type == System::InputType::PUT ? gc.get_board_info : []
 
     # 各プレイヤーに盤面情報送信
-    gc.players.each { |p| server.noti_board_info(p.socket, board_info) }
+    gc.players.each { |p| server.noti_board_info(p.socket, board_info, username: p.username, input_type: input_type, x: x, y: y) }
 
     # ターン終了
     gc.on_turn_end

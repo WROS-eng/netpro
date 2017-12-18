@@ -13,13 +13,14 @@ class BaseBoard
   # 1辺のマス数(端1 + マス8 + 端1)
   SQUARES = 10.freeze
 
+  # コンストラクタ
   def initialize
     reset
   end
 
   # 盤面情報の初期化
   def reset
-    @field = Array.new(SQUARES*SQUARES, 0)
+    @field = Array.new(SQUARES*SQUARES, FIELD[:none])
     0.step(10){|i|  @field[i] = FIELD[:edge]}      # 上端
     90.step(99){|i| @field[i] = FIELD[:edge]}      # 下端
     9.step(99, 10){|i|  @field[i] = FIELD[:edge]}  # 左端

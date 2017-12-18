@@ -1,5 +1,6 @@
-require "socket"
+require 'socket'
 require 'json'
+require './system.rb'
 
 class Server
 
@@ -56,8 +57,11 @@ class Server
   # ボード情報を通知する
   # socket : 接続したソケットインスタンス
   # board_info : ボード情報
-  def noti_board_info(socket, board_info)
-    request = {board_info: board_info}
+  # input_type : プレイヤーの行動
+  # x, y : 置かれたx, y座標
+  # username : ユーザー名
+  def noti_board_info(socket, board_info, username, input_type, x: -1, y: -1, )
+    request = {board_info: board_info, username: username, input_type: input_type, x: x, y: y }
     socket.puts(JSON.generate(request))
   end
 
@@ -104,15 +108,16 @@ class Server
 
       payload = JSON.parse(request)
 
+      input_type, x, y = payload["input_type"], payload["x"], payload["y"]
       # プレイヤーの行動を反映
-      case payload["input_type"]
+      case input_type
         # 指した位置を反映
-        when "PUT" then
-          gc.write_board_info(payload["x"], payload["y"], payload["color"])
+        when System::InputType::PUT then
+          gc.set_board_info(x, y, payload["color"])
         # # パスを記録
-        # when "PASS" then
+        # when System::InputType::PASS then
         # # ゲームを終了
-        # when "RETIRE" then
+        # when System::InputType::RETIRE then
         else
           puts "未定義の行動です。"
       end
@@ -124,10 +129,12 @@ class Server
     rescue => e
       # 失敗
       response = { status: 600, message: "Failed play", error: e.message }
+      input_type, x, y = System::InputType::NONE, -1, -1
       is_play = false
+
     ensure
       socket.puts(JSON.generate(response))
-      return is_play
+      return is_play, input_type, x, y
     end
   end
 end

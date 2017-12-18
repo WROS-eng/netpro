@@ -49,10 +49,10 @@ class GameController
   # y : y座標
   # color : コマの色
   def set_board_info(x, y, color)
-
-
+    @board.put(x, y, color)
   end
 
+  # 盤面情報を取得
   def get_board_info
 
   end
