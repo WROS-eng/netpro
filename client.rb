@@ -40,6 +40,7 @@ class Client
       @client_player = ClientPlayer.new(payload["username"], payload["color"])
     rescue
       puts "回線が貧弱なので、通信に失敗したンゴ☺️ :#{__method__}"
+      raise "回線エラー"
     end
   end
 
@@ -51,6 +52,7 @@ class Client
       return payload
     rescue
       puts "回線が貧弱なので、通信に失敗したンゴ☺️ :#{__method__}"
+      raise "回線エラー"
     end
    end
 
