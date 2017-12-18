@@ -13,13 +13,12 @@ client.on_noti_start_game
 is_finish_game = false
 
 until is_finish_game do
-    turn_data = client.on_noti_play_turn
-    is_finish_game = turn_data["is_finish_game"]
+    turn_count,is_play_turn,is_finish_game = client.on_noti_play_turn
     
     if is_finish_game
         break;
     end
 
-    client.play(turn_data)
+    client.play(is_play_turn)
 
 end

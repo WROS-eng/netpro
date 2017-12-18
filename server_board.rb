@@ -48,16 +48,16 @@ class ServerBoard < BaseBoard
   # 記号文字で出力
   # 改行コード入り文字列で渡すので受取側でputsして下さい
   def pretty_print
-    header = "  #{(1..SQUARES).to_a.join(' ')}\n"   # 列番号
-    body = ""
-    @field.each_with_index do |line, i|
-      body += "#{i+1} "                             # 行番号
-      body += line                                  # 2次元配列の要素 => [0, 0, 1, -1, ...]
-        .map{|l| FIELD.key(l)}                      # 値に対応するキーを取得 => [:none, :none, :white, :black]
-        .map{|k| MARK[k]}                           # キーから出力文字取得 => ["□", "□", "○", "●"]
-        .join(' ') + "\n"                           # 文字列に連結 => "□ □ ○ ●"
-    end
-    header + body
+  #   header = "  #{(1..SQUARES).to_a.join(' ')}\n"   # 列番号
+  #   body = ""
+  #   @field.each_with_index do |line, i|
+  #     body += "#{i+1} "                             # 行番号
+  #     body += line                                  # 2次元配列の要素 => [0, 0, 1, -1, ...]
+  #       .map{|l| FIELD.key(l)}                      # 値に対応するキーを取得 => [:none, :none, :white, :black]
+  #       .map{|k| MARK[k]}                           # キーから出力文字取得 => ["□", "□", "○", "●"]
+  #       .join(' ') + "\n"                           # 文字列に連結 => "□ □ ○ ●"
+  #   end
+  #   header + body
   end
 end
 
