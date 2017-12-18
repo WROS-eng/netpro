@@ -6,7 +6,7 @@ require "./system.rb"
 
 class Client
   TAG = "[Client]".freeze
-  attr_reader :port, :client_player
+  attr_reader :port, :client_player, :client_board
 
   def initialize()
     begin
@@ -39,6 +39,8 @@ class Client
       p payload
       p "色:#{payload["color"]} #{payload["username"]}さんは#{payload["turn_order"]}番です。"
       @client_player = ClientPlayer.new(payload["username"], payload["color"])
+      @client_board = ClientBoard.new()
+      @client_board.pretty_print
     rescue
       puts "回線が貧弱なので、通信に失敗したンゴ☺️ :#{__method__}"
       raise "回線エラー"

@@ -60,7 +60,7 @@ class Server
   # input_type : プレイヤーの行動
   # x, y : 置かれたx, y座標
   # username : ユーザー名
-  def noti_board_info(socket, board_info, username, input_type, x: -1, y: -1, )
+  def noti_board_info(socket, board_info, username, input_type, x: -1, y: -1 )
     request = {board_info: board_info, username: username, input_type: input_type, x: x, y: y }
     socket.puts(JSON.generate(request))
   end
