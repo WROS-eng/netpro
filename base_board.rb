@@ -5,10 +5,10 @@ class BaseBoard
   COLOR = { white: 1, black: -1 }.freeze
 
   # 盤面の状態マップリスト。
-  FIELD = COLOR.merge({none: 0, edge: 9}).freeze
+  FIELD = COLOR.merge({blank: 0, wall: 9}).freeze
 
   # format用絵文字マップリスト
-  MARK = { white: "○", black: "●", none: "0", edge: "■" }.freeze
+  MARK = { white: "○", black: "●", blank: "0", wall: "■" }.freeze
 
   # 1辺のマス数(端1 + マス8 + 端1)
   SQUARES = 10.freeze
@@ -20,11 +20,8 @@ class BaseBoard
 
   # 盤面情報の初期化
   def reset
-    @field = Array.new(SQUARES*SQUARES, FIELD[:none])
-    0.step(10){|i|  @field[i] = FIELD[:edge]}      # 上端
-    90.step(99){|i| @field[i] = FIELD[:edge]}      # 下端
-    9.step(99, 10){|i|  @field[i] = FIELD[:edge]}  # 左端
-    10.step(90, 10){|i| @field[i] = FIELD[:edge]}  # 右端
+    @field = Array.new(SQUARES*SQUARES, FIELD[:wall])
+    (1..8).each{|x| (1..8).each{|y| set_square(x, y, FIELD[:blank])}}
     set_square(4, 4, COLOR[:white])
     set_square(5, 5, COLOR[:white])
     set_square(4, 5, COLOR[:black])
