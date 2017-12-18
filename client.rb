@@ -49,7 +49,7 @@ class Client
     begin
       payload = JSON.parse(json)
       p "#{payload["turn_count"]}ターン目です。"
-      return payload
+      return payload["turn_count"],payload["is_play_turn"],payload["is_finish_game"]
     rescue
       puts "回線が貧弱なので、通信に失敗したンゴ☺️ :#{__method__}"
       raise "回線エラー"
@@ -68,6 +68,7 @@ class Client
       json = JSON.generate({x:pos[0],y:pos[1],input_type:"PUT",color:client_player.color})
     else
       puts "不正な値が入っています:client.rb -> send_stone_pos"
+      raise "stone_pos is incorrect value."
     end
     return json
   end
@@ -88,8 +89,8 @@ class Client
   end
 
 
-   def play(turn_data)
-    if turn_data["is_play_turn"]
+   def play(is_play_turn)
+    if is_play_turn
       puts "自分のターンです。置きたい場所を入力してください。"
       input = "xy"
       #ここに置けるかどうかの判定を入れる
