@@ -32,16 +32,27 @@ class BaseBoard
   # x : 横
   # y : 縦
   def get_square(x, y)
-    index = x + y * SQUARES
-    @field[index]
+    @field[xy2index(x, y)]
   end
 
   # 座標のマス情報を変更。
   # x : 横
   # y : 縦
   def set_square(x, y, color)
-    index = x + y * SQUARES
-    @field[index] = color
+    @field[xy2index(x, y)] = color
+  end
+
+  # xy座標をindexに変換
+  # x : 横
+  # y : 縦
+  def xy2index(x, y)
+    x + y * SQUARES
+  end
+
+  # indexをxy座標に変換
+  # index : 要素index
+  def index2xy(index)
+    x, y = index/SQUARES, index%SQUARES
   end
 
   # デバッグ用表示関数
