@@ -4,6 +4,7 @@ class BaseBoard
   # 色のマップリスト。とりあえずボードが持ってます
   COLOR = { white: 1, black: -1 }.freeze
 
+
   # 盤面の状態マップリスト。
   FIELD = COLOR.merge({blank: 0, wall: 9}).freeze
 
@@ -12,6 +13,9 @@ class BaseBoard
 
   # 1辺のマス数(端1 + マス8 + 端1)
   SQUARES = 10.freeze
+  
+  #置いた位置からの向き
+  DIR = {up_left: -SQUARES, up: -SQUARES + 1, up_right:-SQUARES + 2, left: -1 , center: 0, right: 1, down_left: SQUARES - 2, down: SQUARES - 1, down_right: SQUARES}.freeze
 
   # コンストラクタ
   def initialize

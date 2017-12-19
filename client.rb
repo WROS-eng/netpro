@@ -59,22 +59,6 @@ class Client
     end
    end
 
-  def create_stone_pos_json(input_data,turn_type)
-    json = ""
-    case turn_type
-    when System::InputType::RETIRE
-      json = JSON.generate({input_type:System::InputType::RETIRE})
-    when System::InputType::PASS
-      json = JSON.generate({input_type:System::InputType::PASS})
-    when System::InputType::PUT
-      pos = input_data.chars
-      json = JSON.generate({x:pos[0],y:pos[1], input_type:System::InputType::PUT, color:client_player.color})
-    else
-      puts "不正な値が入っています:client.rb -> send_stone_pos"
-      raise "stone_pos is incorrect value."
-    end
-    return json
-  end
 
   def on_noti_board_info
   end
@@ -92,29 +76,47 @@ class Client
   end
 
 
-   def play(is_play_turn)
-    if is_play_turn
-      puts "自分のターンです。置きたい場所を入力してください。"
-      input = "xy"
-      #ここに置けるかどうかの判定を入れる
-      loop do
-        input = gets.to_s.chomp
-        #２文字、整数のみの判定 https://qiita.com/pecotech26/items/ee392125727f04bafaed
-        if input.length == 2 && input =~ /^[0-9]+$/  
-          json = create_stone_pos_json(input, System::InputType::PUT)
+   def play()
+    loop do
+      input = gets.to_s.chomp
+      #２文字、整数のみの判定 https://qiita.com/pecotech26/items/ee392125727f04bafaed
+      if input =~ /^[1-8],\s?[1-8]$/
+        pos = input.split(",")
+        posX = pos[0].to_i
+        posY = pos[1].to_i
+        if @client_board.get_flip_count(client_player.color, posX, posY) > 0  
+          json = create_stone_pos_json(posX, posY, System::InputType::PUT)
           send(json)
-          break 
+          break
+        else
+          puts "そこには置けません"
         end
-        #qが押されたら終了処理
-        if input.eql?("q")
-          json = create_stone_pos_json(input, System::InputType::RETIRE)
-          send(json)
-          break 
-        end
-        puts "error"
-      end 
-    else
-      puts "相手ターンです"
-    end
+      end
+      #qが押されたら終了処理
+      if input.eql?("q")
+        json = create_stone_pos_json(input, System::InputType::RETIRE)
+        send(json)
+        break 
+      end
+    end 
   end
+
+
+
+  def create_stone_pos_json(posX, posY, turn_type)
+    json = ""
+    case turn_type
+    when System::InputType::RETIRE
+      json = JSON.generate({input_type:System::InputType::RETIRE})
+    when System::InputType::PASS
+      json = JSON.generate({input_type:System::InputType::PASS})
+    when System::InputType::PUT
+      json = JSON.generate({x:posX,y:posY, input_type:System::InputType::PUT, color:client_player.color})
+    else
+      puts "不正な値が入っています:client.rb -> send_stone_pos"
+      raise "stone_pos is incorrect value."
+    end
+    return json
+  end
+
 end
