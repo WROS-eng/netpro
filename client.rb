@@ -40,7 +40,7 @@ class Client
       p "色:#{payload["color"]} #{payload["username"]}さんは#{payload["turn_order"]}番です。"
       @client_player = ClientPlayer.new(payload["username"], payload["color"])
       @client_board = ClientBoard.new()
-      @client_board.pretty_print
+      # @client_board.pretty_print
     rescue
       puts "回線が貧弱なので、通信に失敗したンゴ☺️ :#{__method__}"
       raise "回線エラー"
@@ -75,10 +75,8 @@ class Client
     receive
   end
 
-
-   def play()
-    puts "自分のターンです。置きたい場所を入力してください。"
-    @client_board.pretty_print
+   def play()    
+    #置く処理
     loop do
       input = gets.to_s.chomp
       #２文字、整数のみの判定 https://qiita.com/pecotech26/items/ee392125727f04bafaed
@@ -104,11 +102,7 @@ class Client
   end
 
   def wait
-    puts "相手のターンです。"
-    @client_board.pretty_print
   end
-
-
 
   def create_stone_pos_json(posX, posY, turn_type)
     json = ""

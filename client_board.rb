@@ -4,14 +4,16 @@ class ClientBoard < BaseBoard
     
     #盤面の描画
     def pretty_print
-        #x,yをSQUARESの回数ぶん回す
-        SQUARES.times do |y|
-            SQUARES.times do |x|
-                #配列の番号によって、記号を書く
-                print_mark(get_square(x,y))
-            end
-            puts #一列終わったら改行
+        header = "  #{(1..SQUARES).to_a.join(' ')}\n"   # 列番号
+        body = ""
+        @field.each_with_index do |line, i|
+            body += "#{i+1} "                             # 行番号
+            body += line                                  # 2次元配列の要素 => [0, 0, 1, -1, ...]
+            .map{|l| FIELD.key(l)}                      # 値に対応するキーを取得 => [:none, :none, :white, :black]
+            .map{|k| MARK[k]}                           # キーから出力文字取得 => ["□", "□", "○", "●"]
+            .join(' ') + "\n"                           # 文字列に連結 => "□ □ ○ ●"
         end
+        puts header + body
     end
 
     #そのままfor文に書くと複雑な見た目になるので、メソッド化
@@ -28,8 +30,7 @@ class ClientBoard < BaseBoard
     end
 
     #盤面の反転
-    #Return値がtrueならひっくり返せた
-    #Return値がfalseならひっくり返す石がない
+    #Return値が0以上ならひっくり返すことができる
     def get_flip_count(color, x, y)
         result = 0
         if get_square(x,y) != FIELD[:blank] then 
@@ -65,7 +66,6 @@ class ClientBoard < BaseBoard
             pos += pos_dir
             puts "Values =  #{COLOR.values - [color]} color = #{@field[pos]} pos_dir #{pos_dir}"
         end
-
 
         if @field[pos] != color then
             return 0
