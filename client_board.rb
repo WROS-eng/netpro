@@ -4,16 +4,29 @@ class ClientBoard < BaseBoard
     
     #盤面の描画
     def pretty_print
-        header = "  #{(1..SQUARES).to_a.join(' ')}\n"   # 列番号
-        body = ""
-        @field.each_with_index do |line, i|
-            body += "#{i+1} "                             # 行番号
-            body += line                                  # 2次元配列の要素 => [0, 0, 1, -1, ...]
-            .map{|l| FIELD.key(l)}                      # 値に対応するキーを取得 => [:none, :none, :white, :black]
-            .map{|k| MARK[k]}                           # キーから出力文字取得 => ["□", "□", "○", "●"]
-            .join(' ') + "\n"                           # 文字列に連結 => "□ □ ○ ●"
+        #x,yをSQUARESの回数ぶん回す
+        for y in 0..SQUARES
+            for x in 0..SQUARES
+                # 端の列の1~8までの数字 
+                if y == 0 then
+                    if 1 < x && x < 10
+                        print " #{x - 1}"
+                    elsif 
+                        print "  "
+                    end
+                elsif x == 0 then
+                    if 1 < y && y < 10
+                        print " #{y - 1}"
+                    else 
+                        print "  "
+                    end
+                #石の描画
+                else
+                    print_mark(get_square(x - 1,y - 1))
+                end
+            end
+            puts #一列終わったら改行
         end
-        puts header + body
     end
 
     #そのままfor文に書くと複雑な見た目になるので、メソッド化
