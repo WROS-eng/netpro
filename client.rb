@@ -77,6 +77,8 @@ class Client
 
 
    def play()
+    puts "自分のターンです。置きたい場所を入力してください。"
+    @client_board.pretty_print
     loop do
       input = gets.to_s.chomp
       #２文字、整数のみの判定 https://qiita.com/pecotech26/items/ee392125727f04bafaed
@@ -101,6 +103,11 @@ class Client
     end 
   end
 
+  def wait
+    puts "相手のターンです。"
+    @client_board.pretty_print
+  end
+
 
 
   def create_stone_pos_json(posX, posY, turn_type)
@@ -113,7 +120,7 @@ class Client
     when System::InputType::PUT
       json = JSON.generate({x:posX,y:posY, input_type:System::InputType::PUT, color:client_player.color})
     else
-      puts "不正な値が入っています:client.rb -> send_stone_pos"
+      p "不正な値が入っています:client.rb -> send_stone_pos"
       raise "stone_pos is incorrect value."
     end
     return json
