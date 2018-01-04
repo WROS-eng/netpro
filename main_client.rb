@@ -20,9 +20,8 @@ until is_finish_game do
     end
 
     if is_play_turn then
-        puts "自分のターンです。置きたい場所を入力してください。"
         client.play()
     else
-        puts "相手のターンです。"
+        client.wait()
     end
 end
