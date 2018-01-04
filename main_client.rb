@@ -19,10 +19,21 @@ until is_finish_game do
         break;
     end
 
+    #自分の番なら石を置く。相手ターンなら待つ
     if is_play_turn then
-        puts "自分のターンです。置きたい場所を入力してください。"
-        client.play()
-    else
+        loop do
+            puts "自分のターンです。置きたい場所を入力してください。"
+            client.play()
+            if client.on_noti_play_response == 200
+                break
+            end
+            puts "１文字以上で入力して下さい"
+        end
+    else 
         puts "相手のターンです。"
+        client.wait()
     end
+    
+    #ボードのデータを受け取る 
+    client.on_noti_board_info   
 end

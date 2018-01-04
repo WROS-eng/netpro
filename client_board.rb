@@ -5,10 +5,25 @@ class ClientBoard < BaseBoard
     #盤面の描画
     def pretty_print
         #x,yをSQUARESの回数ぶん回す
-        SQUARES.times do |y|
-            SQUARES.times do |x|
-                #配列の番号によって、記号を書く
-                print_mark(get_square(x,y))
+        for y in 0..SQUARES
+            for x in 0..SQUARES
+                # 端の列の1~8までの数字 
+                if y == 0 then
+                    if 1 < x && x < 10
+                        print " #{x - 1}"
+                    elsif 
+                        print "  "
+                    end
+                elsif x == 0 then
+                    if 1 < y && y < 10
+                        print " #{y - 1}"
+                    else 
+                        print "  "
+                    end
+                #石の描画
+                else
+                    print_mark(get_square(x - 1,y - 1))
+                end
             end
             puts #一列終わったら改行
         end
@@ -28,8 +43,7 @@ class ClientBoard < BaseBoard
     end
 
     #盤面の反転
-    #Return値がtrueならひっくり返せた
-    #Return値がfalseならひっくり返す石がない
+    #Return値が0以上ならひっくり返すことができる
     def get_flip_count(color, x, y)
         result = 0
         if get_square(x,y) != FIELD[:blank] then 
@@ -50,12 +64,11 @@ class ClientBoard < BaseBoard
     end
 
     #一方向の盤面を返す処理
+    #resultが１以上なら一つ以上の石をひっくり返せるということ
     def get_flip_count_with_dir(color, x, y, pos_dir)
-        #resultが１以上なら一つ以上の石をひっくり返せるということ
-        opponent_color = get_opponent_color(color)
         
         #pos_dirを足すだけの方法にするにはxとyを一つの変数にする必要がある
-        put_pos =( y * SQUARES )+ x 
+        put_pos = xy2index(x,y)
 
         #置いた場所からdirの方向に一つずれたところから探索
         pos = put_pos + pos_dir
@@ -65,7 +78,6 @@ class ClientBoard < BaseBoard
             pos += pos_dir
             puts "Values =  #{COLOR.values - [color]} color = #{@field[pos]} pos_dir #{pos_dir}"
         end
-
 
         if @field[pos] != color then
             return 0
@@ -77,17 +89,9 @@ class ClientBoard < BaseBoard
         while pos != put_pos do
             flip_count += 1
             pos -= pos_dir
-            puts "pos =  #{pos} put_pos = #{put_pos}"
+            puts "pos =  #{index2xy(pos)} put_pos = #{index2xy(put_pos)}"
         end
 
         return flip_count
-    end
-
-    def get_opponent_color(color)
-        if color == COLOR[:white] then 
-            return COLOR[:black]
-        else
-            return COLOR[:white]
-        end
     end
 end
