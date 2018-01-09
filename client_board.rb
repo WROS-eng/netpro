@@ -42,56 +42,64 @@ class ClientBoard < BaseBoard
         end
     end
 
-    #盤面の反転
-    #Return値が0以上ならひっくり返すことができる
+    # 指定マスに置いた際に反転する石の数を返す
+    # x : 置くx座標
+    # y : 置くy座標
+    # color : 置く石の石の色
+    # return 反転する石の数。1以上ならひっくり返すことができる
     def get_flip_count(color, x, y)
-        result = 0
-        if get_square(x,y) != FIELD[:blank] then 
-            return 0
+        get_flip_list(color, x, y).length
+    end
+
+    # 指定マスに置いた際に反転する石リストを返す処理
+    # x : 置くx座標
+    # y : 置くy座標
+    # color : 置く石の石の色
+    # return result : 反転する石のindexリスト。リストの長さが1以上ならひっくり返すことができる
+    def get_flip_list(color, x, y)
+        result = []
+
+        # 置けるのは空きマスのときだけ
+        if get_square(x,y) == FIELD[:blank] then
+            #一列ずつ見て行く.centerは置いた場所なので、見なくてよい
+            result += get_flip_list_with_dir(color, x, y, DIR[:up_left])
+            result += get_flip_list_with_dir(color, x, y, DIR[:up])
+            result += get_flip_list_with_dir(color, x, y, DIR[:up_right])
+            result += get_flip_list_with_dir(color, x, y, DIR[:left])
+            result += get_flip_list_with_dir(color, x, y, DIR[:right])
+            result += get_flip_list_with_dir(color, x, y, DIR[:down_left])
+            result += get_flip_list_with_dir(color, x, y, DIR[:down])
+            result += get_flip_list_with_dir(color, x, y, DIR[:down_right])
         end
 
-        #一列ずつ見て行く.centerは置いた場所なので、見なくてよい
-        result += get_flip_count_with_dir(color, x, y, DIR[:up_left])
-        result += get_flip_count_with_dir(color, x, y, DIR[:up])
-        result += get_flip_count_with_dir(color, x, y, DIR[:up_right])
-        result += get_flip_count_with_dir(color, x, y, DIR[:left])
-        result += get_flip_count_with_dir(color, x, y, DIR[:right])
-        result += get_flip_count_with_dir(color, x, y, DIR[:down_left])
-        result += get_flip_count_with_dir(color, x, y, DIR[:down])
-        result += get_flip_count_with_dir(color, x, y, DIR[:down_right])
-        
         return result
     end
 
-    #一方向の盤面を返す処理
-    #resultが１以上なら一つ以上の石をひっくり返せるということ
-    def get_flip_count_with_dir(color, x, y, pos_dir)
+    # 指定一方向の反転する石リストを返す処理
+    # x : 置くx座標
+    # y : 置くy座標
+    # color : 置く石の石の色
+    # pos_dir : 反転方向
+    # return result : 反転する石のindexリスト。
+    def get_flip_list_with_dir(color, x, y, flip_dir)
         
-        #pos_dirを足すだけの方法にするにはxとyを一つの変数にする必要がある
+        # 配列のindexで探索するため、xyをindex情報に変換する
         put_pos = xy2index(x,y)
 
-        #置いた場所からdirの方向に一つずれたところから探索
-        pos = put_pos + pos_dir
+        # 置いた場所からdirの方向に一つずれたところから探索
+        pos = put_pos + flip_dir
 
-        #置いたカラー以外の石ならdir方向に探索
+        flip_list = []
+        # 置いたカラー以外の色ならdir方向に探索
         while (COLOR.values - [color]).include?(@field[pos]) do
-            pos += pos_dir
-            puts "Values =  #{COLOR.values - [color]} color = #{@field[pos]} pos_dir #{pos_dir}"
+            flip_list.push(pos)
+            pos += flip_dir
+            puts "Values =  #{COLOR.values - [color]} color = #{@field[pos]} pos_dir #{flip_dir}"
         end
 
-        if @field[pos] != color then
-            return 0
-        end
+        # 探索終了したマスが置いた色と異なる場合はリストをクリア
+        flip_list.clear if @field[pos] != color
 
-        flip_count = 0
-        pos -= pos_dir
-        
-        while pos != put_pos do
-            flip_count += 1
-            pos -= pos_dir
-            puts "pos =  #{index2xy(pos)} put_pos = #{index2xy(put_pos)}"
-        end
-
-        return flip_count
+        return flip_list
     end
 end
