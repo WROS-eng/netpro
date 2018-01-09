@@ -103,21 +103,25 @@ class Server
   # return is_play : 指すのに成功したか
   def on_play(socket, gc)
     begin
+      # 受信
       request = socket.gets.chomp
-      puts request
+      p request
 
+      # パース
       payload = JSON.parse(request)
 
-      input_type, x, y = payload["input_type"], payload["x"], payload["y"]
       # プレイヤーの行動を反映
+      input_type, x, y = payload["input_type"], payload["x"], payload["y"]
       case input_type
         # 指した位置を反映
         when System::InputType::PUT then
           gc.set_board_info(x, y, payload["color"])
         # # パスを記録
-        # when System::InputType::PASS then
-        # # ゲームを終了
-        # when System::InputType::RETIRE then
+        when System::InputType::PASS then
+          puts "Pass"
+        # ゲームを終了
+        when System::InputType::RETIRE then
+          puts "Retire"
         else
           puts "未定義の行動です。"
       end

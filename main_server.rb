@@ -19,10 +19,10 @@ end
 puts "参加上限に達しました。"
 
 # GameControllerへゲーム開始通知依頼
-orders = gc.start_game
+player_orders = gc.start_game
 
 # 各プレイヤーへ開始通知
-orders.map {|turn_order, p| server.noti_start_game(p.socket, turn_order, p.id, p.username, p.color) }
+player_orders.each {|turn_order, p| server.noti_start_game(p.socket, turn_order, p.id, p.username, p.color) }
 
 #ゲームが終わるまで手番ループ
 until gc.is_finished_game? do
@@ -33,8 +33,8 @@ until gc.is_finished_game? do
     # 各プレイヤーに手番かどうかを送る
     gc.players.each {|p| server.noti_play_turn(p.socket, turn_count, is_play_turn: (p.id == player.id), is_finish_game: false)}
 
-    # 指し指令受取待ち
-    is_play, input_type, x, y = server.on_play(player.socket, gc)
+    # 指し指令受取
+    _, input_type, x, y = server.on_play(player.socket, gc)
 
     # 盤面情報取得
     board_info = input_type == System::InputType::PUT ? gc.get_board_info : []
