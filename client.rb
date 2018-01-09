@@ -99,7 +99,10 @@ class Client
       puts "#{payload}"
      
       #盤面の描画
-      client_board.pretty_print
+      color = payload["color"]
+      @client_board.set_square(payload["x"], payload["y"], color)
+      @client_board.flip(payload["flip_stones"], color)
+      @client_board.pretty_print
       
     rescue
       #失敗

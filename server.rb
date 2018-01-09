@@ -56,12 +56,13 @@ class Server
 
   # ボード情報を通知する
   # socket : 接続したソケットインスタンス
-  # board_info : ボード情報
+  # username : ユーザー名
   # input_type : プレイヤーの行動
   # x, y : 置かれたx, y座標
-  # username : ユーザー名
-  def noti_board_info(socket, board_info, username, input_type, x: -1, y: -1 )
-    request = {board_info: board_info, username: username, input_type: input_type, x: x, y: y }
+  # color : 置かれた石の色
+  # flip_stones : ボード情報
+  def noti_board_info(socket, username, input_type, x, y, color, flip_stones )
+    request = {username: username, input_type: input_type, x: x, y: y, color: color, flip_stones: flip_stones }
     socket.puts(JSON.generate(request))
   end
 
@@ -102,6 +103,7 @@ class Server
   # gc : ゲームコントローラインスタンス
   # return is_play : 指すのに成功したか
   def on_play(socket, gc)
+    flip_stones = []
     begin
       # 受信
       request = socket.gets.chomp
@@ -111,11 +113,11 @@ class Server
       payload = JSON.parse(request)
 
       # プレイヤーの行動を反映
-      input_type, x, y = payload["input_type"], payload["x"], payload["y"]
+      input_type, x, y, color = payload["input_type"], payload["x"], payload["y"], payload["color"]
       case input_type
         # 指した位置を反映
         when System::InputType::PUT then
-          gc.set_board_info(x, y, payload["color"])
+          flip_stones = gc.set_board_info(x, y, color)
         # # パスを記録
         when System::InputType::PASS then
           puts "Pass"
@@ -133,12 +135,12 @@ class Server
     rescue => e
       # 失敗
       response = { status: 600, message: "Failed play", error: e.message }
-      input_type, x, y = System::InputType::NONE, -1, -1
+      input_type, x, y, color = System::InputType::NONE, -1, -1, -9999
       is_play = false
 
     ensure
       socket.puts(JSON.generate(response))
-      return is_play, input_type, x, y
+      return is_play, input_type, x, y, color, flip_stones
     end
   end
 end

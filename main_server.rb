@@ -34,13 +34,10 @@ until gc.is_finished_game? do
     gc.players.each {|p| server.noti_play_turn(p.socket, turn_count, is_play_turn: (p.id == player.id), is_finish_game: false)}
 
     # 指し指令受取
-    _, input_type, x, y = server.on_play(player.socket, gc)
-
-    # 盤面情報取得
-    board_info = input_type == System::InputType::PUT ? gc.get_board_info : []
+    _, input_type, x, y, color, flip_stones = server.on_play(player.socket, gc)
 
     # 各プレイヤーに盤面情報送信
-    gc.players.each { |p| server.noti_board_info(p.socket, board_info, p.username, input_type, x: x, y: y) }
+    gc.players.each { |p| server.noti_board_info(p.socket, p.username, input_type, x, y, color, flip_stones) }
 
     # ターン終了
     gc.on_turn_end
