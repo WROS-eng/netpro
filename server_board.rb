@@ -7,11 +7,10 @@ class ServerBoard < BaseBoard
   # x : 横
   # y : 縦
   # color : コマの色
-  # return stone_indices : ひっくり返した石のリスト
+  # return field_diff : クライアントに反映する石のリスト
   def put(x, y, color)
-    flip_stones = get_flip_list(color, x, y)
-    set_square(x, y, color)
-    flip(flip_stones, color)
-    return flip_stones
+    field_diff = get_flip_list(color, x, y) + [xy2index(x, y)]
+    update(field_diff, color)
+    return field_diff
   end
 end

@@ -100,8 +100,7 @@ class Client
      
       #盤面の描画
       color = payload["color"]
-      @client_board.set_square(payload["x"], payload["y"], color)
-      @client_board.flip(payload["flip_stones"], color)
+      @client_board.update(payload["field_diff"], color)
       @client_board.pretty_print
       
     rescue

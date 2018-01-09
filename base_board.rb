@@ -77,7 +77,7 @@ class BaseBoard
   # stone_indices : ひっくり返す石の座標リスト
   # color : コマの色
   # return ひっくり返した数
-  def flip(stone_indices, color)
+  def update(stone_indices, color)
     stone_indices.each{|idx| set_square_by_index(idx, color)}
   end
 

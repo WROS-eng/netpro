@@ -61,8 +61,8 @@ class Server
   # x, y : 置かれたx, y座標
   # color : 置かれた石の色
   # flip_stones : ボード情報
-  def noti_board_info(socket, username, input_type, x, y, color, flip_stones )
-    request = {username: username, input_type: input_type, x: x, y: y, color: color, flip_stones: flip_stones }
+  def noti_board_info(socket, username, input_type, x, y, color, field_diff )
+    request = {username: username, input_type: input_type, x: x, y: y, color: color, field_diff: field_diff }
     socket.puts(JSON.generate(request))
   end
 
@@ -103,7 +103,7 @@ class Server
   # gc : ゲームコントローラインスタンス
   # return is_play : 指すのに成功したか
   def on_play(socket, gc)
-    flip_stones = []
+    field_diff = []
     begin
       # 受信
       request = socket.gets.chomp
@@ -117,7 +117,7 @@ class Server
       case input_type
         # 指した位置を反映
         when System::InputType::PUT then
-          flip_stones = gc.set_board_info(x, y, color)
+          field_diff = gc.set_board_info(x, y, color)
         # # パスを記録
         when System::InputType::PASS then
           puts "Pass"
@@ -140,7 +140,7 @@ class Server
 
     ensure
       socket.puts(JSON.generate(response))
-      return is_play, input_type, x, y, color, flip_stones
+      return is_play, input_type, x, y, color, field_diff
     end
   end
 end
