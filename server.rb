@@ -60,7 +60,7 @@ class Server
   # input_type : プレイヤーの行動
   # x, y : 置かれたx, y座標
   # color : 置かれた石の色
-  # flip_stones : ボード情報
+  # field_diff : 盤面の更新情報
   def noti_board_info(socket, username, input_type, x, y, color, field_diff )
     request = {username: username, input_type: input_type, x: x, y: y, color: color, field_diff: field_diff }
     socket.puts(JSON.generate(request))

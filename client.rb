@@ -99,8 +99,7 @@ class Client
       puts "#{payload}"
      
       #盤面の描画
-      color = payload["color"]
-      @client_board.update(payload["field_diff"], color)
+      @client_board.update(payload["field_diff"], payload["color"])
       @client_board.pretty_print
       
     rescue
