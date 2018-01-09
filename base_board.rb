@@ -56,7 +56,7 @@ class BaseBoard
   # indexをxy座標に変換
   # index : 要素index
   def index2xy(index)
-    x, y = index/SQUARES, index%SQUARES
+    x, y = index%SQUARES, index/SQUARES
   end
 
   # デバッグ用表示関数
