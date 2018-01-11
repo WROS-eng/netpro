@@ -44,11 +44,14 @@ class Client
       #パース
       payload = JSON.parse(json)
       p payload
-      p "色:#{payload["color"]} #{payload["username"]}さんは#{payload["turn_order"]}番です。"
 
       #インスタンス生成
       @client_player = ClientPlayer.new(payload["username"], payload["color"])
       @client_board = ClientBoard.new()
+
+      #ユーザーデータの表示
+      puts "色:#{@client_board.get_color_str(payload["color"])}"
+      puts "#{payload["username"]}さんは#{payload["turn_order"]}番です。"
       
       #盤面の描画
       @client_board.pretty_print

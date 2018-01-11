@@ -132,5 +132,12 @@ class BaseBoard
 
     return flip_list
   end
+
+  # 石の色を好きな名前で返すための関数
+  # COLORが他クラスから参照できなかったので、用意しました
+  # color = 石の色
+  def get_color_str(color)
+    COLOR.key(color)
+  end
 end
 
