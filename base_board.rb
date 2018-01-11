@@ -73,10 +73,64 @@ class BaseBoard
     x, y = index%SQUARES, index/SQUARES
   end
 
-  # デバッグ用表示関数
-  def debug_print
-    require 'pp'
-    pp @field.each_slice(10).to_a
+  # ひっくり返す
+  # stone_indices : ひっくり返す石の座標リスト
+  # color : コマの色
+  # return ひっくり返した数
+  def update(stone_indices, color)
+    stone_indices.each{|idx| set_square_by_index(idx, color)}
+  end
+
+  # 指定マスに置いた際に反転する石リストを返す処理
+  # x : 置くx座標
+  # y : 置くy座標
+  # color : 置く石の石の色
+  # return result : 反転する石のindexリスト。リストの長さが1以上ならひっくり返すことができる
+  def get_flip_list(color, x, y)
+    result = []
+
+    # 置けるのは空きマスのときだけ
+    if get_square(x,y) == FIELD[:blank] then
+      #一列ずつ見て行く.centerは置いた場所なので、見なくてよい
+      result += get_flip_list_with_dir(color, x, y, DIR[:up_left])
+      result += get_flip_list_with_dir(color, x, y, DIR[:up])
+      result += get_flip_list_with_dir(color, x, y, DIR[:up_right])
+      result += get_flip_list_with_dir(color, x, y, DIR[:left])
+      result += get_flip_list_with_dir(color, x, y, DIR[:right])
+      result += get_flip_list_with_dir(color, x, y, DIR[:down_left])
+      result += get_flip_list_with_dir(color, x, y, DIR[:down])
+      result += get_flip_list_with_dir(color, x, y, DIR[:down_right])
+    end
+    p result
+
+    return result
+  end
+
+  # 指定一方向の反転する石リストを返す処理
+  # x : 置くx座標
+  # y : 置くy座標
+  # color : 置く石の石の色
+  # pos_dir : 反転方向
+  # return result : 反転する石のindexリスト。
+  def get_flip_list_with_dir(color, x, y, flip_dir)
+    # 配列のindexで探索するため、xyをindex情報に変換する
+    put_pos = xy2index(x,y)
+
+    # 置いた場所からdirの方向に一つずれたところから探索
+    pos = put_pos + flip_dir
+
+    flip_list = []
+    exclude_put_colors = COLOR.values - [color]
+    # 置いたカラー以外の色ならdir方向に探索
+    while (exclude_put_colors).include?(get_square_by_index(pos)) do
+      flip_list.push(pos)
+      pos += flip_dir
+    end
+
+    # 探索終了したマスが置いた色と異なる場合はリストを空にする
+    flip_list.clear if get_square_by_index(pos) != color
+
+    return flip_list
   end
 end
 

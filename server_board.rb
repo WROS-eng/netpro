@@ -7,29 +7,10 @@ class ServerBoard < BaseBoard
   # x : 横
   # y : 縦
   # color : コマの色
-  # return reverse_count : ひっくり返した数
+  # return field_diff : クライアントに反映する石のリスト
   def put(x, y, color)
-    set_square(x, y, color)
-    stones = get_reverse_stones(x, y, color)
-    reverse_count = reverse(stones)
-    return reverse_count
-  end
-
-  private
-  # ひっくり返す石の座標リストをもらう
-  # x : 横
-  # y : 縦
-  # color : コマの色
-  # return ひっくり返す石の座標リスト
-  def get_reverse_stones(x, y, color)
-
-
-  end
-
-  # ひっくり返す
-  # stones : ひっくり返す石の座標リスト
-  # return ひっくり返した数
-  def reverse(stones)
-
+    field_diff = get_flip_list(color, x, y) + [xy2index(x, y)]
+    update(field_diff, color)
+    return field_diff
   end
 end
