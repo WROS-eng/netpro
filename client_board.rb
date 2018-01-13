@@ -1,43 +1,21 @@
-require "./base_board.rb"
+require './base_board.rb'
 
+# クライアントで扱うボードクラス
 class ClientBoard < BaseBoard
-  #盤面の描画
+  # 盤面の描画
   def pretty_print
-    #x,yをSQUARESの回数ぶん回す
-    for y in 0..SQUARES
-      for x in 0..SQUARES
-        # 端の列の1~8までの数字
-        if y == 0 then
-          if 1 < x && x < 10
-            print " #{x - 1}"
-          elsif print "  "
-          end
-        elsif x == 0 then
-          if 1 < y && y < 10
-            print " #{y - 1}"
-          else
-            print "  "
-          end
-          #石の描画
-        else
-          print_mark(get_square(x - 1, y - 1))
-        end
-      end
-      puts #一列終わったら改行
-    end
-  end
+    filed_marks =
+      @field
+      .map { |f| FIELD.key(f) }
+      .map { |f| MARK[f] }
+      .each_slice(SQUARES)
+      .map { |f| f.join(' ') }
 
-  #そのままfor文に書くと複雑な見た目になるので、メソッド化
-  def print_mark(field_value)
-    if field_value == COLOR[:white]
-      print MARK[:white]
-    elsif field_value == COLOR[:black]
-      print MARK[:black]
-    elsif field_value == FIELD[:wall]
-      print MARK[:wall]
-    else
-      print MARK[:blank]
-    end
+    print_range = 1..SQUARES - 2
+    puts "     #{print_range.to_a.join(' ')}"
+    puts "   #{filed_marks.first}"
+    filed_marks[print_range].each_with_index { |f, i| puts " #{i + 1} #{f}" }
+    puts "   #{filed_marks.last}"
   end
 
   # 指定マスに置いた際に反転する石の数を返す
@@ -53,7 +31,7 @@ class ClientBoard < BaseBoard
   # x : 置くx座標
   # y : 置くy座標
   # return true or false
-  def can_put_stone(x,y)
-    return get_square(x,y) == FIELD[:blank]
+  def can_put_stone(x, y)
+    return get_square(x, y) == FIELD[:blank]
   end
 end
