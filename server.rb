@@ -118,6 +118,8 @@ class Server
       input_type, x, y, color = payload['input_type'], payload['x'], payload['y'], payload['color']
       field_diff = []
       is_play = false
+
+      # 行動ログの保存
       case input_type
         # 指した位置を反映
         when System::InputType::PUT then
@@ -130,10 +132,13 @@ class Server
         # ゲームを終了
         when System::InputType::RETIRE then
           puts 'Retire'
-          gc.curr_player.retire
+          is_play = true
         else
-          puts '未定義の行動です。'
+          raise '未定義の行動です。'
       end
+
+      # 行動ログの保存
+      gc.curr_player.add_play_log(input_type) if is_play
 
       # 成功
       response = { status: 200, message: 'Succeeded play' }

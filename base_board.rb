@@ -107,7 +107,6 @@ class BaseBoard
     result += get_flip_list_with_dir(color, x, y, DIR[:down_left])
     result += get_flip_list_with_dir(color, x, y, DIR[:down])
     result += get_flip_list_with_dir(color, x, y, DIR[:down_right])
-    p result
 
     return result
   end

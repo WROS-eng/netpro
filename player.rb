@@ -5,12 +5,15 @@ require 'securerandom'
 class Player
   attr_reader :id, :username, :color, :socket
 
-  MAX_PASS = 2  # パス可能数
+  MAX_PASS = 2 # パス可能数
+
+  LOG_LENGTH = 2 # ログの保存数
 
   def initialize(username)
     @id = SecureRandom.uuid  # 識別id。名前だと被る恐れあるので、手番判定のときとかにこれを使う
     @username = username     # ユーザー名という名のプレイヤー名。
-    @pass_cnt = 0
+    @pass_cnt = 0            # パス回数
+    @play_log = []           # 行動ログ
   end
 
   # ソケットインスタンスの登録
@@ -32,8 +35,19 @@ class Player
     return can_pass
   end
 
-  # リタイア
-  def retire
+  # 行動ログの保存
+  def add_play_log(input_type)
+    @play_log.push(input_type)
+    @play_log.shift if @play_log.length > LOG_LENGTH
+  end
 
+  # 2連続でパスしたか
+  def streak_pass?
+    @play_log.last(2).count(System::InputType::PASS) == 2
+  end
+
+  # リタイアしたか
+  def retired?
+    @play_log.last == System::InputType::RETIRE
   end
 end

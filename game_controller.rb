@@ -38,11 +38,12 @@ class GameController
   end
 
   # ゲームが終了したか
+  # 終了条件
+  #   プレイヤーがリタイアした
+  #   パスが2回続いた
+  #   置けなくなった
   def finished_game?
-    # プレイヤーがリタイアした、切断が切れた
-    # パスが2回続いた
-    # 置けなくなった
-    false
+    @curr_player.retired? || @curr_player.streak_pass? || !@board.put_place_exist?(next_player.color)
   end
 
   # 指した位置を盤面に反映
@@ -55,14 +56,14 @@ class GameController
   end
 
   # ターン開始時に呼ぶイベント処理
-  # return ターン数, プレイするプレイヤー, 置けるか
+  # return ターン数, プレイするプレイヤー
   def on_turn_start
     player = turn_player
     if change_player?(player)
       @curr_player = player
       puts "#{@turn}ターン目"
     end
-    return @turn, @curr_player, @board.put_place_exist?
+    return @turn, @curr_player
   end
 
   # ターン終了時に呼ぶイベント処理
@@ -71,9 +72,14 @@ class GameController
     @turn += 1 if is_play
   end
 
-  # ターンのプレイヤーを取得
+  # 現在のターンプレイヤーを取得
   def turn_player
     @players[(@turn - 1) % @join_limit]
+  end
+
+  # 次のターンプレイヤーを取得
+  def next_player
+    @players[@turn % @join_limit]
   end
 
   # プレイヤーが変わっているか

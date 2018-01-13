@@ -15,7 +15,12 @@ class ServerBoard < BaseBoard
   end
 
   # 置けるマスがあるか
-  def put_place_exist?
-    true
+  # 空きマスに対して全探索で置いた際にひっくり返せる場所があるか確認する
+  def put_place_exist?(color)
+    (0..@field.length)
+      .select { |i| get_square_by_index(i) == FIELD[:blank] }
+      .map { |i| index2xy(i) }
+      .any? { |f| get_flip_count(color, f[0], f[1]) > 0 }
   end
+
 end
