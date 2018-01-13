@@ -140,8 +140,9 @@ class Client
     loop do
 
       # 入力
-      input = gets.to_s.chomp
-      # ２文字、整数のみの判定 https://qiita.com/pecotech26/items/ee392125727f04bafaed
+      input = gets.to_s.chomp.downcase()
+      p input
+      # 入力文字がx,yの形
       if input =~ /^[1-8],\s?[1-8]$/
         # x、yにキャスト
         posX, posY = parse_input_to_pos(input)
@@ -167,8 +168,8 @@ class Client
         end
       end
 
-      # Exit
-      if input.eql?('q')
+      # リタイア
+      if input.eql?('retire')
         # json生成
         json = JSON.generate(input_type: System::InputType::RETIRE)
 
@@ -178,13 +179,17 @@ class Client
       end
 
       # パス
-      next unless input.eql?('pass')
-      # json生成
-      json = JSON.generate(input_type: System::InputType::PASS)
+      if input.eql?('pass')
+        # json生成
+        json = JSON.generate(input_type: System::InputType::PASS)
 
-      # 送信
-      send(json)
-      break
+        # 送信
+        send(json)
+        break
+      end
+
+      # x,yでもpassでもretireでもない
+      puts "無効な入力です。'posX,posY' or 'pass' or 'retire'　で入力してください"
     end
  end
 

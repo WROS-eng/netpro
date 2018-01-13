@@ -22,7 +22,7 @@ until is_finish_game
   # 自分の番なら石を置く。相手ターンなら待つ
   if is_play_turn
     loop do
-      puts '自分のターンです。置きたい場所を入力してください。'
+      puts "自分のターンです。置きたい場所を入力してください。'posX,posY' or 'pass' or 'retire'　で入力してください"
 
       # 石を置く処理
       client.play
