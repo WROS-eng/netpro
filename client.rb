@@ -171,19 +171,30 @@ class Client
         
         else
           #一つもない場合
-          puts "そこは#{@client_board::FIELD[:blank]}ではないので置けません"
+          puts "そこは#{ClientBoard::FIELD[:blank]}ではないので置けません"
         end
       end
 
       #qが押されたら終了処理
       if input.eql?("q")
         #json生成
-        json = create_stone_pos_json(input, System::InputType::RETIRE)
+        json = JSON.generate({input_type:System::InputType::RETIRE})
         
         #送信
         send(json)
         break 
       
+      end
+
+      #qが押されたら終了処理
+      if input.eql?("pass")
+        #json生成
+        json = JSON.generate({input_type:System::InputType::PASS})
+
+        #送信
+        send(json)
+        break
+
       end
     end 
   end
