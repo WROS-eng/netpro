@@ -5,16 +5,16 @@ class BaseBoard
   COLOR = { white: 1, black: -1 }.freeze
 
   # 盤面の状態マップリスト。
-  FIELD = COLOR.merge({blank: 0, wall: 9}).freeze
+  FIELD = COLOR.merge(blank: 0, wall: 9).freeze
 
   # format用絵文字マップリスト
-  MARK = { white: " ○", black: " ●", blank: " 0", wall: " ■" }.freeze
+  MARK = { white: ' ○', black: ' ●', blank: ' 0', wall: ' ■' }.freeze
 
   # 1辺のマス数(端1 + マス8 + 端1)
-  SQUARES = 10.freeze
-  
-  #置いた位置からの向き
-  DIR = {up_left: -SQUARES, up: -SQUARES + 1, up_right:-SQUARES + 2, left: -1 , center: 0, right: 1, down_left: SQUARES - 2, down: SQUARES - 1, down_right: SQUARES}.freeze
+  SQUARES = 10
+
+  # 置いた位置からの向き
+  DIR = { up_left: -SQUARES, up: -SQUARES + 1, up_right: -SQUARES + 2, left: -1, center: 0, right: 1, down_left: SQUARES - 2, down: SQUARES - 1, down_right: SQUARES }.freeze
 
   # コンストラクタ
   def initialize
@@ -24,8 +24,8 @@ class BaseBoard
   # 盤面情報の初期化
   def reset
     # 盤面情報は1次元配列で管理
-    @field = Array.new(SQUARES*SQUARES, FIELD[:wall])
-    (1..8).each{|x| (1..8).each{|y| set_square(x, y, FIELD[:blank])}}
+    @field = Array.new(SQUARES * SQUARES, FIELD[:wall])
+    (1..8).each { |x| (1..8).each { |y| set_square(x, y, FIELD[:blank]) } }
     set_square(4, 4, COLOR[:white])
     set_square(5, 5, COLOR[:white])
     set_square(4, 5, COLOR[:black])
@@ -70,7 +70,7 @@ class BaseBoard
   # indexをxy座標に変換
   # index : 要素index
   def index2xy(index)
-    x, y = index%SQUARES, index/SQUARES
+    return index % SQUARES, index / SQUARES
   end
 
   # ひっくり返す
@@ -78,7 +78,7 @@ class BaseBoard
   # color : コマの色
   # return ひっくり返した数
   def update(stone_indices, color)
-    stone_indices.each{|idx| set_square_by_index(idx, color)}
+    stone_indices.each { |idx| set_square_by_index(idx, color) }
   end
 
   # 指定マスに置いた際に反転する石リストを返す処理
@@ -89,7 +89,7 @@ class BaseBoard
   def get_flip_list(color, x, y)
     result = []
 
-    #一列ずつ見て行く.centerは置いた場所なので、見なくてよい
+    # 一列ずつ見て行く.centerは置いた場所なので、見なくてよい
     result += get_flip_list_with_dir(color, x, y, DIR[:up_left])
     result += get_flip_list_with_dir(color, x, y, DIR[:up])
     result += get_flip_list_with_dir(color, x, y, DIR[:up_right])
@@ -111,7 +111,7 @@ class BaseBoard
   # return result : 反転する石のindexリスト。
   def get_flip_list_with_dir(color, x, y, flip_dir)
     # 配列のindexで探索するため、xyをindex情報に変換する
-    put_pos = xy2index(x,y)
+    put_pos = xy2index(x, y)
 
     # 置いた場所からdirの方向に一つずれたところから探索
     pos = put_pos + flip_dir
@@ -119,7 +119,7 @@ class BaseBoard
     flip_list = []
     exclude_put_colors = COLOR.values - [color]
     # 置いたカラー以外の色ならdir方向に探索
-    while (exclude_put_colors).include?(get_square_by_index(pos)) do
+    while exclude_put_colors.include?(get_square_by_index(pos))
       flip_list.push(pos)
       pos += flip_dir
     end
@@ -130,4 +130,3 @@ class BaseBoard
     return flip_list
   end
 end
-
