@@ -4,7 +4,7 @@ require './server_board.rb'
 # ゲームを管理するコントローラ
 class GameController
 
-  attr_reader :players
+  attr_reader :players, :curr_player
 
   # 初期化処理
   def initialize

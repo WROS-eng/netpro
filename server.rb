@@ -126,9 +126,11 @@ class Server
         # # パスを記録
         when System::InputType::PASS then
           puts 'Pass'
+          is_play = gc.curr_player.pass
         # ゲームを終了
         when System::InputType::RETIRE then
           puts 'Retire'
+          gc.curr_player.retire
         else
           puts '未定義の行動です。'
       end
