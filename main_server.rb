@@ -9,7 +9,7 @@ gc = GameController.new
 server = Server.new
 
 # 参加受付開始
-until gc.is_join_limit?
+until gc.join_limit?
   # 接続待機
   socket = server.port.accept
 
@@ -25,7 +25,7 @@ player_orders = gc.start_game
 player_orders.each { |turn_order, p| server.notice_start_game(p.socket, turn_order, p.id, p.username, p.color) }
 
 # ゲームが終わるまで手番ループ
-until gc.is_finished_game?
+until gc.finished_game?
   gc.players.each do |player|
     # ターン開始
     turn_count, = gc.on_turn_start
