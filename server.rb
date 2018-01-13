@@ -2,6 +2,7 @@ require 'socket'
 require 'json'
 require './system.rb'
 
+# サーバクラス
 class Server
 
   attr_reader :port
@@ -12,7 +13,7 @@ class Server
       # 20000番のポートを解放
       @port = TCPServer.open(20000)
       puts 'TCPServer.open success!'
-    rescue
+    rescue StandardError
       puts 'TCPServer.open failed :#$!'
     end
   end
@@ -43,8 +44,8 @@ class Server
   # id : プレイヤーid
   # username : プレイヤー名
   # color : プレイヤーの使う色
-  def noti_start_game(socket, turn_order, id, username, color)
-    request = {turn_order: turn_order, id: id, username: username, color: color}
+  def notice_start_game(socket, turn_order, id, username, color)
+    request = { turn_order: turn_order, id: id, username: username, color: color }
     send(socket, JSON.generate(request))
   end
 
@@ -52,8 +53,8 @@ class Server
   # socket : 接続したソケットインスタンス
   # turn_count : ターン数
   # is_play_turn : 手番かどうか
-  def noti_play_turn(socket, turn_count, is_play_turn:, is_finish_game:)
-    request = {turn_count: turn_count, is_play_turn: is_play_turn, is_finish_game: is_finish_game}
+  def notice_play_turn(socket, turn_count, is_play_turn:, is_finish_game:)
+    request = { turn_count: turn_count, is_play_turn: is_play_turn, is_finish_game: is_finish_game }
     send(socket, JSON.generate(request))
   end
 
@@ -64,8 +65,8 @@ class Server
   # x, y : 置かれたx, y座標
   # color : 置かれた石の色
   # field_diff : 盤面の更新情報
-  def noti_board_info(socket, username, input_type, x, y, color, field_diff )
-    request = {username: username, input_type: input_type, x: x, y: y, color: color, field_diff: field_diff }
+  def notice_board_info(socket, username, input_type, x, y, color, field_diff)
+    request = { username: username, input_type: input_type, x: x, y: y, color: color, field_diff: field_diff }
     send(socket, JSON.generate(request))
   end
 
@@ -83,21 +84,20 @@ class Server
       result = JSON.parse(request)
 
       # プレイヤー作成
-      player = gc.register_player(result["username"])
+      player = gc.register_player(result['username'])
       player.register_socket(socket)
 
       # 成功
-      response = { status: 200, message: "Succeeded join" }
+      response = { status: 200, message: 'Succeeded join' }
       is_join = true
-
-    rescue => e
+      return is_join
+    rescue StandardError => e
       # 失敗
-      response = { status: 500, message: "Failed join", error: e.message }
+      response = { status: 500, message: 'Failed join', error: e.message }
       is_join = false
-
+      return is_join
     ensure
       socket.puts(JSON.generate(response))
-      return is_join
     end
   end
 
@@ -106,7 +106,6 @@ class Server
   # gc : ゲームコントローラインスタンス
   # return is_play : 指すのに成功したか
   def on_play(socket, gc)
-    field_diff = []
     begin
       # 受信
       request = receive(socket)
@@ -116,35 +115,33 @@ class Server
       payload = JSON.parse(request)
 
       # プレイヤーの行動を反映
-      input_type, x, y, color = payload["input_type"], payload["x"], payload["y"], payload["color"]
+      input_type, x, y, color = payload['input_type'], payload['x'], payload['y'], payload['color']
+      field_diff = []
       case input_type
         # 指した位置を反映
         when System::InputType::PUT then
           field_diff = gc.set_board_info(x, y, color)
         # # パスを記録
         when System::InputType::PASS then
-          puts "Pass"
+          puts 'Pass'
         # ゲームを終了
         when System::InputType::RETIRE then
-          puts "Retire"
+          puts 'Retire'
         else
-          puts "未定義の行動です。"
+          puts '未定義の行動です。'
       end
 
       # 成功
-      response = { status: 200, message: "Succeeded play" }
+      response = { status: 200, message: 'Succeeded play' }
       is_play = true
-
-    rescue => e
+      return is_play, input_type, x, y, color, field_diff
+    rescue StandardError => e
       # 失敗
-      response = { status: 600, message: "Failed play", error: e.message }
-      input_type, x, y, color = System::InputType::NONE, -1, -1, -9999
+      response = { status: 600, message: 'Failed play', error: e.message }
       is_play = false
-
+      return is_play, System::InputType::NONE, -1, -1, -9999, []
     ensure
       socket.puts(JSON.generate(response))
-      return is_play, input_type, x, y, color, field_diff
     end
   end
 end
-
