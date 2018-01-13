@@ -13,27 +13,27 @@ client.on_noti_start_game
 is_finish_game = false
 
 until is_finish_game do
-    turn_count,is_play_turn,is_finish_game = client.on_noti_play_turn
-    
-    if is_finish_game
-        break;
-    end
+  turn_count, is_play_turn, is_finish_game = client.on_noti_play_turn
 
-    #自分の番なら石を置く。相手ターンなら待つ
-    if is_play_turn then
-        loop do
-            puts "自分のターンです。置きたい場所を入力してください。"
-            client.play()
-            if client.on_noti_play_response == 200
-                break
-            end
-            puts "１文字以上で入力して下さい"
-        end
-    else 
-        puts "相手のターンです。"
-        client.wait()
+  if is_finish_game
+    break;
+  end
+
+  #自分の番なら石を置く。相手ターンなら待つ
+  if is_play_turn then
+    loop do
+      puts "自分のターンです。置きたい場所を入力してください。"
+      client.play()
+      if client.on_noti_play_response == 200
+        break
+      end
+      puts "１文字以上で入力して下さい"
     end
-    
-    #ボードのデータを受け取る 
-    client.on_noti_board_info   
+  else
+    puts "相手のターンです。"
+    client.wait()
+  end
+
+  #ボードのデータを受け取る
+  client.on_noti_board_info
 end
