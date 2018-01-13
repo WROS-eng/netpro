@@ -140,7 +140,7 @@ class Client
     loop do
 
       # 入力
-      input = gets.to_s.chomp.downcase()
+      input = gets.to_s.chomp.downcase
       p input
       # 入力文字がx,yの形
       if input =~ /^[1-8],\s?[1-8]$/
@@ -150,7 +150,7 @@ class Client
 
         # 空きマスかどうか
         unless @client_board.can_put_stone(posX, posY)
-          puts 'そこは空きマスではないので、置けません'
+          puts "そこは#{ClientBoard::FIELD[:blank]}ではないので置けません"
           next
         end
 
@@ -164,32 +164,28 @@ class Client
           break
         else
           # 一つもない場合
-          puts "そこは#{ClientBoard::FIELD[:blank]}ではないので置けません"
+          puts "そこは一つも裏返せないので置けません"
         end
-      end
-
-      # リタイア
-      if input.eql?('retire')
+      elsif input.eql?('retire')
+        # リタイア
         # json生成
         json = JSON.generate(input_type: System::InputType::RETIRE)
 
         # 送信
         send(json)
         break
-      end
-
-      # パス
-      if input.eql?('pass')
+      elsif input.eql?('pass')
+        # パス
         # json生成
         json = JSON.generate(input_type: System::InputType::PASS)
 
         # 送信
         send(json)
         break
+      else
+        # x,yでもpassでもretireでもない
+        puts "無効な入力です。'posX,posY' or 'pass' or 'retire'　で入力してください"
       end
-
-      # x,yでもpassでもretireでもない
-      puts "無効な入力です。'posX,posY' or 'pass' or 'retire'　で入力してください"
     end
  end
 
@@ -235,7 +231,6 @@ class Client
 
       # 成功
       puts (payload['message']).to_s
-
     rescue StandardError
       # 失敗　
       puts "回線が貧弱なので、通信に失敗したンゴ☺️ :#{__method__}"
