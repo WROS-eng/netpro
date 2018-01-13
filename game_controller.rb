@@ -48,15 +48,12 @@ class GameController
   # x : x座標
   # y : y座標
   # color : コマの色
+  # return クライアントに反映する石のリスト
   def set_board_info(x, y, color)
-    @board.put(x, y, color)
+    return @board.put(x, y, color)
   end
 
-  # 盤面情報を取得
-  def get_board_info
-
-  end
-
+  # ターン開始時に呼ぶイベント処理
   def on_turn_start
     puts "#{@turn}ターン目"
     # 置けるか確認
@@ -64,6 +61,7 @@ class GameController
     return @turn, can_put_stone
   end
 
+  # ターン終了時に呼ぶイベント処理
   def on_turn_end
     @turn += 1
   end
