@@ -13,4 +13,9 @@ class ServerBoard < BaseBoard
     update(field_diff, color)
     return field_diff
   end
+
+  # 置けるマスがあるか
+  def put_place_exist?
+    true
+  end
 end

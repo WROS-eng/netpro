@@ -12,6 +12,7 @@ class GameController
     @players = []                      # プレイヤーリスト
     @board = ServerBoard.new                 # 盤面
     @join_limit = ServerBoard::COLOR.length  # 参加上限数
+    @curr_player = nil
   end
 
   # プレイヤーの登録
@@ -54,15 +55,30 @@ class GameController
   end
 
   # ターン開始時に呼ぶイベント処理
+  # return ターン数, プレイするプレイヤー, 置けるか
   def on_turn_start
-    puts "#{@turn}ターン目"
-    # 置けるか確認
-    can_put_stone = true
-    return @turn, can_put_stone
+    player = turn_player
+    if change_player?(player)
+      @curr_player = player
+      puts "#{@turn}ターン目"
+    end
+    return @turn, @curr_player, @board.put_place_exist?
   end
 
   # ターン終了時に呼ぶイベント処理
-  def on_turn_end
-    @turn += 1
+  # is_play : 置くのに成功したか
+  def on_turn_end(is_play)
+    @turn += 1 if is_play
+  end
+
+  # ターンのプレイヤーを取得
+  def turn_player
+    @players[(@turn - 1) % @join_limit]
+  end
+
+  # プレイヤーが変わっているか
+  # player : プレイヤーインスタンス
+  def change_player?(player)
+    @curr_player.nil? || @curr_player.id != player.id
   end
 end

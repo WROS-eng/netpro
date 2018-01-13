@@ -117,10 +117,12 @@ class Server
       # プレイヤーの行動を反映
       input_type, x, y, color = payload['input_type'], payload['x'], payload['y'], payload['color']
       field_diff = []
+      is_play = false
       case input_type
         # 指した位置を反映
         when System::InputType::PUT then
           field_diff = gc.set_board_info(x, y, color)
+          is_play = true
         # # パスを記録
         when System::InputType::PASS then
           puts 'Pass'
@@ -133,13 +135,11 @@ class Server
 
       # 成功
       response = { status: 200, message: 'Succeeded play' }
-      is_play = true
       return is_play, input_type, x, y, color, field_diff
     rescue StandardError => e
       # 失敗
       response = { status: 600, message: 'Failed play', error: e.message }
-      is_play = false
-      return is_play, System::InputType::NONE, -1, -1, -9999, []
+      return false, System::InputType::NONE, -1, -1, -9999, []
     ensure
       socket.puts(JSON.generate(response))
     end
