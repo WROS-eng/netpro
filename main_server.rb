@@ -45,3 +45,9 @@ loop do
   # ターン終了
   gc.on_turn_end(is_play)
 end
+
+# 各プレイヤーにゲーム結果送信
+Result = Struct.new(:username, :result, :stone_cnt, :pass_cnt)
+battle_data = gc.result
+results = gc.players.map{ |p| Result.new(p.username, battle_data[p.id], gc.get_stone_cnt(p.color), p.pass_cnt) }
+gc.players.each { |p| server.notice_result_data(p.socket, results) }

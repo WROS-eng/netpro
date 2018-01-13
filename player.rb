@@ -3,7 +3,7 @@ require 'securerandom'
 
 # プレイヤークラス
 class Player
-  attr_reader :id, :username, :color, :socket
+  attr_reader :id, :username, :color, :socket, :pass_cnt
 
   MAX_PASS = 2 # パス可能数
 

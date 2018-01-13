@@ -55,6 +55,11 @@ class GameController
     return @board.put(x, y, color)
   end
 
+  # その色の石の数を返す
+  def get_stone_cnt(color)
+    @board.get_stone_cnt(color)
+  end
+
   # ターン開始時に呼ぶイベント処理
   # return ターン数, プレイするプレイヤー
   def on_turn_start
@@ -86,5 +91,20 @@ class GameController
   # player : プレイヤーインスタンス
   def change_player?(player)
     @curr_player.nil? || @curr_player.id != player.id
+  end
+
+  def result
+    result = {}
+    if @curr_player.retired? || @curr_player.streak_pass?
+      result = @players.each{|p| [p.id, p.id==@curr_player.id ? 'lose' : 'win']}.to_h
+    else
+      data = players.each{ |p| [p.id, get_stone_cnt(p.color)]}.to_h
+      if data.values.uniq.size > 1
+        result = @players.each{|p| [p.id, p.id == data.max.id ? 'win' : 'lose']}.to_h
+      else
+        result = @players.each{|p| [p.id, 'draw']}.to_h
+      end
+    end
+    result
   end
 end
