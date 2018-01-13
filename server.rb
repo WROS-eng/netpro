@@ -11,27 +11,30 @@ class Server
     begin
       # 20000番のポートを解放
       @port = TCPServer.open(20000)
-      puts "TCPServer.open success!"
+      puts 'TCPServer.open success!'
     rescue
-      puts "TCPServer.open failed :#$!"
+      puts 'TCPServer.open failed :#$!'
     end
   end
 
   # サーバ切断処理
-  def close
-    @port.close
-    puts "close"
+  # socket : 接続したソケットインスタンス
+  def close(socket)
+    socket.close
+    puts 'close'
   end
 
   # サーバからの送信
+  # socket : 接続したソケットインスタンス
   # msg : 送信メッセージ
-  def send(msg)
-    @port.puts(msg)
+  def send(socket, msg)
+    socket.puts(msg)
   end
 
   # サーバへの送信
-  def receive
-    p @port.gets.chomp
+  # socket : 接続したソケットインスタンス
+  def receive(socket)
+    socket.gets.chomp
   end
 
   # ゲーム開始通知
@@ -42,7 +45,7 @@ class Server
   # color : プレイヤーの使う色
   def noti_start_game(socket, turn_order, id, username, color)
     request = {turn_order: turn_order, id: id, username: username, color: color}
-    socket.puts(JSON.generate(request))
+    send(socket, JSON.generate(request))
   end
 
   # 手番かどうかを通知する
@@ -51,7 +54,7 @@ class Server
   # is_play_turn : 手番かどうか
   def noti_play_turn(socket, turn_count, is_play_turn:, is_finish_game:)
     request = {turn_count: turn_count, is_play_turn: is_play_turn, is_finish_game: is_finish_game}
-    socket.puts(JSON.generate(request))
+    send(socket, JSON.generate(request))
   end
 
   # ボード情報を通知する
@@ -63,7 +66,7 @@ class Server
   # field_diff : 盤面の更新情報
   def noti_board_info(socket, username, input_type, x, y, color, field_diff )
     request = {username: username, input_type: input_type, x: x, y: y, color: color, field_diff: field_diff }
-    socket.puts(JSON.generate(request))
+    send(socket, JSON.generate(request))
   end
 
   # プレイヤーが参加したとき
@@ -73,7 +76,7 @@ class Server
   def on_join(socket, gc)
     begin
       # 受信
-      request = socket.gets.chomp
+      request = receive(socket)
       p request
 
       # パース
@@ -106,7 +109,7 @@ class Server
     field_diff = []
     begin
       # 受信
-      request = socket.gets.chomp
+      request = receive(socket)
       p request
 
       # パース
