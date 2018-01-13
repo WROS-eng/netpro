@@ -8,7 +8,7 @@ class BaseBoard
   FIELD = COLOR.merge(blank: 0, wall: 9).freeze
 
   # format用絵文字マップリスト
-  MARK = { white: '○', black: '●', blank: '0', wall: '■' }.freeze
+  MARK = { white: '⚪️', black: '⚫️', blank: '❇️', wall: '⬛️' }.freeze
 
   # 1辺のマス数(端1 + マス8 + 端1)
   SQUARES = 10
