@@ -89,18 +89,15 @@ class BaseBoard
   def get_flip_list(color, x, y)
     result = []
 
-    # 置けるのは空きマスのときだけ
-    if get_square(x,y) == FIELD[:blank] then
-      #一列ずつ見て行く.centerは置いた場所なので、見なくてよい
-      result += get_flip_list_with_dir(color, x, y, DIR[:up_left])
-      result += get_flip_list_with_dir(color, x, y, DIR[:up])
-      result += get_flip_list_with_dir(color, x, y, DIR[:up_right])
-      result += get_flip_list_with_dir(color, x, y, DIR[:left])
-      result += get_flip_list_with_dir(color, x, y, DIR[:right])
-      result += get_flip_list_with_dir(color, x, y, DIR[:down_left])
-      result += get_flip_list_with_dir(color, x, y, DIR[:down])
-      result += get_flip_list_with_dir(color, x, y, DIR[:down_right])
-    end
+    #一列ずつ見て行く.centerは置いた場所なので、見なくてよい
+    result += get_flip_list_with_dir(color, x, y, DIR[:up_left])
+    result += get_flip_list_with_dir(color, x, y, DIR[:up])
+    result += get_flip_list_with_dir(color, x, y, DIR[:up_right])
+    result += get_flip_list_with_dir(color, x, y, DIR[:left])
+    result += get_flip_list_with_dir(color, x, y, DIR[:right])
+    result += get_flip_list_with_dir(color, x, y, DIR[:down_left])
+    result += get_flip_list_with_dir(color, x, y, DIR[:down])
+    result += get_flip_list_with_dir(color, x, y, DIR[:down_right])
     p result
 
     return result
