@@ -222,4 +222,19 @@ class Client
     posX, posY = pos[0].to_i, pos[1].to_i
   end
 
+  def on_noti_result_data
+    json = receive
+    begin
+      # パース
+      payload = JSON.parse(json)
+
+      # 成功
+      puts (payload['message']).to_s
+
+    rescue StandardError
+      # 失敗　
+      puts "回線が貧弱なので、通信に失敗したンゴ☺️ :#{__method__}"
+      raise '回線エラー'
+    end
+  end
 end

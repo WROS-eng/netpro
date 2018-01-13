@@ -40,3 +40,5 @@ until is_finish_game
   # ボードのデータを受け取る
   client.on_noti_board_info
 end
+
+client.on_noti_result_data
