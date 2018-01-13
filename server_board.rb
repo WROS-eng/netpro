@@ -1,4 +1,4 @@
-require "./base_board.rb"
+require './base_board.rb'
 
 # 盤面情報を格納するクラス
 class ServerBoard < BaseBoard

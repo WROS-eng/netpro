@@ -1,3 +1,4 @@
+# クライアント側で扱うプレイヤークラス
 class ClientPlayer
   attr_reader :username, :color
 

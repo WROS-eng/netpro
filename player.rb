@@ -1,5 +1,5 @@
 # uuid生成に必要なモジュール
-require "securerandom"
+require 'securerandom'
 
 # プレイヤークラス
 class Player
