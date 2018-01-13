@@ -81,6 +81,15 @@ class BaseBoard
     stone_indices.each { |idx| set_square_by_index(idx, color) }
   end
 
+  # 指定マスに置いた際に反転する石の数を返す
+  # x : 置くx座標
+  # y : 置くy座標
+  # color : 置く石の石の色
+  # return 反転する石の数。1以上ならひっくり返すことができる
+  def get_flip_count(color, x, y)
+    get_flip_list(color, x, y).length
+  end
+
   # 指定マスに置いた際に反転する石リストを返す処理
   # x : 置くx座標
   # y : 置くy座標
