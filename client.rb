@@ -154,6 +154,12 @@ class Client
         posX = pos[0].to_i
         posY = pos[1].to_i
         p " x = #{posX} y = #{posY}"
+
+        if !@client_board.can_put_stone(posX,posY) then
+          puts "そこは空きマスではないので、置けません"
+          next
+        end
+
         #裏返す石が一つ以上あるなら
         if @client_board.get_flip_count(client_player.color, posX, posY) > 0  
           #json生成
@@ -165,8 +171,7 @@ class Client
         
         else
           #一つもない場合
-          puts "そこには置けません"
-
+          puts "そこは#{@client_board::FIELD[:blank]}ではないので置けません"
         end
       end
 

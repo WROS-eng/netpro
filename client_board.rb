@@ -48,4 +48,12 @@ class ClientBoard < BaseBoard
   def get_flip_count(color, x, y)
     get_flip_list(color, x, y).length
   end
+
+  # 指定マスに石が置けるか
+  # x : 置くx座標
+  # y : 置くy座標
+  # return true or false
+  def can_put_stone(x,y)
+    return get_square(x,y) == FIELD[:blank]
+  end
 end
