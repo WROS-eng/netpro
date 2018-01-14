@@ -98,11 +98,11 @@ class GameController
     if @curr_player.retired? || @curr_player.streak_pass?
       result = @players.each{|p| [p.id, p.id==@curr_player.id ? 'lose' : 'win']}.to_h
     else
-      data = players.each{ |p| [p.id, get_stone_cnt(p.color)]}.to_h
+      data = @players.map{|p| [p.id, get_stone_cnt(p.color)]}.to_h
       if data.values.uniq.size > 1
-        result = @players.each{|p| [p.id, p.id == data.max.id ? 'win' : 'lose']}.to_h
+        result = @players.map{|p| [p.id, p.id == data.max ? 'win' : 'lose']}.to_h
       else
-        result = @players.each{|p| [p.id, 'draw']}.to_h
+        result = @players.map{|p| [p.id, 'draw']}.to_h
       end
     end
     result

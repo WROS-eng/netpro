@@ -30,7 +30,9 @@ loop do
   turn_count, player = gc.on_turn_start
 
   # 各プレイヤーに手番かどうかを送る
-  gc.players.each { |p| server.notice_play_turn(p.socket, turn_count, is_play_turn: (p.id == player.id), is_finish_game: false) }
+  gc.players.each { |p| server.notice_play_turn(p.socket, turn_count, is_play_turn: (p.id == player.id), is_finish_game: gc.finished_game? ) }
+
+  break if gc.finished_game?
 
   # 指し指令受取
   is_play, input_type, x, y, color, field_diff = server.on_play(player.socket, gc)
@@ -47,7 +49,7 @@ loop do
 end
 
 # 各プレイヤーにゲーム結果送信
-Result = Struct.new(:username, :result, :stone_cnt, :pass_cnt)
+puts "終わり！"
 battle_data = gc.result
-results = gc.players.map{ |p| Result.new(p.username, battle_data[p.id], gc.get_stone_cnt(p.color), p.pass_cnt) }
+results = gc.players.map{ |p| System::Result.new(p.username, battle_data[p.id], gc.get_stone_cnt(p.color), p.pass_cnt) }
 gc.players.each { |p| server.notice_result_data(p.socket, results) }

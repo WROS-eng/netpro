@@ -72,7 +72,7 @@ class Server
 
   # 結果データを送信する
   # player_results : 結果データhash
-  def notice_result_data(socket, **player_results)
+  def notice_result_data(socket, *player_results)
     send(socket, JSON.generate(player_results))
   end
 

@@ -137,10 +137,13 @@ class Client
   # color : playerのカラー(白 or 黒)
   def play
     # 置く処理
+    testX,testY = 1,1
+
     loop do
 
       # 入力
-      input = gets.to_s.chomp.downcase
+      # input = gets.to_s.chomp.downcase
+      input = "#{testX},#{testY}"
       p input
       # 入力文字がx,yの形
       if input =~ /^[1-8],\s?[1-8]$/
@@ -151,6 +154,7 @@ class Client
         # 空きマスかどうか
         unless @client_board.can_put_stone(posX, posY)
           puts "そこは#{ClientBoard::FIELD[:blank]}ではないので置けません"
+          testX +=1
           next
         end
 
@@ -185,6 +189,17 @@ class Client
       else
         # x,yでもpassでもretireでもない
         puts "無効な入力です。'posX,posY' or 'pass' or 'retire'　で入力してください"
+      end
+
+      testX +=1
+      if testX >= ClientBoard::SQUARES then
+        testX = 1
+        testY += 1
+        if(testY >= ClientBoard::SQUARES)then
+          json = JSON.generate(input_type: System::InputType::PASS)
+          send(json)
+          break
+        end
       end
     end
  end
@@ -224,17 +239,19 @@ class Client
   end
 
   def on_noti_result_data
+    puts "終わり！"
     json = receive
-    begin
-      # パース
-      payload = JSON.parse(json)
-
-      # 成功
-      puts (payload['message']).to_s
-    rescue StandardError
-      # 失敗　
-      puts "回線が貧弱なので、通信に失敗したンゴ☺️ :#{__method__}"
-      raise '回線エラー'
-    end
+    # begin
+    # パース
+    # payload = JSON.payloadrse(json)
+   #a = A.new(*JSON[json].values)
+    result = System::Result.new(*json)
+    # 成功
+    puts "デーた#{(result.username)}"
+  # rescue StandardError
+    # 失敗　
+    # puts "回線が貧弱なので、通信に失敗したンゴ☺️ :#{__method__}"
+    # raise '回線エラー'
+    # end
   end
 end

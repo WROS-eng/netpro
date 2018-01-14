@@ -6,4 +6,6 @@ module System
     RETIRE = 3   # リタイア
     NONE = -1    # 未定義の行動
   end
+
+  Result = Struct.new(:username, :result, :stone_cnt, :pass_cnt)
 end
