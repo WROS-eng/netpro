@@ -25,7 +25,7 @@ until is_finish_game
       puts "自分のターンです。置きたい場所を入力してください。'posX,posY' or 'pass' or 'retire'　で入力してください"
 
       # 石を置く処理
-      client.play
+      client.play(true)
 
       # 200なら成功
       break if client.on_noti_play_response == 200

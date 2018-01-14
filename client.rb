@@ -135,7 +135,66 @@ class Client
   # y : 置く位置Y
   # input_type : PUT, PASS, RETIRE
   # color : playerのカラー(白 or 黒)
-  def play
+  # is_auto :　trueにしたら勝手に置いてくれます
+  def play(is_auto = false)
+    if is_auto then
+      auto_play
+      return
+    end
+
+    # 置く処理
+    loop do
+      # 入力
+      input = gets.to_s.chomp.downcase
+      p input
+      # 入力文字がx,yの形
+      if input =~ /^[1-8],\s?[1-8]$/
+        # x、yにキャスト
+        posX, posY = parse_input_to_pos(input)
+        p " x = #{posX} y = #{posY}"
+
+        # 空きマスかどうか
+        unless @client_board.can_put_stone(posX, posY)
+          puts "そこは#{ClientBoard::FIELD[:blank]}ではないので置けません"
+          next
+        end
+
+        # 裏返す石が一つ以上あるなら
+        if @client_board.get_flip_count(client_player.color, posX, posY) > 0
+          # json生成
+          json = JSON.generate(x: posX, y: posY, input_type: System::InputType::PUT, color: client_player.color)
+
+          # 送信
+          send(json)
+          break
+        else
+          # 一つもない場合
+          puts "そこは一つも裏返せないので置けません"
+        end
+      elsif input.eql?('retire')
+        # リタイア
+        # json生成
+        json = JSON.generate(input_type: System::InputType::RETIRE)
+
+        # 送信
+        send(json)
+        break
+      elsif input.eql?('pass')
+        # パス
+        # json生成
+        json = JSON.generate(input_type: System::InputType::PASS)
+
+        # 送信
+        send(json)
+        break
+      else
+        # x,yでもpassでもretireでもない
+        puts "無効な入力です。'posX,posY' or 'pass' or 'retire'　で入力してください"
+      end
+    end
+  end
+
+  def auto_play
     # 置く処理
     testX,testY = 1,1
 
@@ -202,7 +261,7 @@ class Client
         end
       end
     end
- end
+  end
 
   # playメソッド後、Serverから通信完了できたか、レスポンスが返ってくる
   # レスポンスのステータスをreturn
