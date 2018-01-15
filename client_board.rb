@@ -13,9 +13,9 @@ class ClientBoard < BaseBoard
 
     print_range = 1..SQUARES - 2
 
-    puts "\n      #{print_range.map{|i| format('%02d', i)}.join}"
+    puts "\n      #{print_range.map{|i|  i.to_s.rjust(2)}.join}"
     puts "    #{filed_marks.first}"
-    filed_marks[print_range].each_with_index { |f, i| puts " #{format('%02d', i + 1)} #{f}" }
+    filed_marks[print_range].each_with_index { |f, i| puts " #{(i + 1).to_s.rjust(2)} #{f}" }
     puts "    #{filed_marks.last}\n\n"
   end
 

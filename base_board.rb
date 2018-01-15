@@ -30,15 +30,20 @@ class BaseBoard
     center = (SQUARES - 2) / 2
     center_upper = center + 1
     center2upper = center + 2
-    center_lower = center + 1
-    center2lower = center + 1
+    center_lower = center - 1
+    center2lower = center - 2
 
+    set_square(center_upper, center_lower, COLOR[:white])
     set_square(center, center, COLOR[:white])
-    set_square(center_upper, center_upper, COLOR[:white])
-    set_square(center, center_upper, COLOR[:black])
-    set_square(center_upper, center, COLOR[:black])
-    set_square(center, center2upper, COLOR[:yellow])
-    set_square(center_upper, center2upper, COLOR[:yellow])
+    set_square(center_lower, center_upper, COLOR[:white])
+
+    set_square(center_upper, center_upper, COLOR[:black])
+    set_square(center, center_lower, COLOR[:black])
+    set_square(center_lower, center, COLOR[:black])
+
+    set_square(center_upper, center, COLOR[:yellow])
+    set_square(center, center_upper, COLOR[:yellow])
+    set_square(center_lower, center_lower, COLOR[:yellow])
   end
 
   # 指定indexのマス情報を取得。

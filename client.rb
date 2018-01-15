@@ -142,7 +142,7 @@ class Client
       # 入力
       input = gets.to_s.chomp.downcase
       # 入力文字がx,yの形
-      if input =~ /^[1-8],\s?[1-8]$/
+      if input =~ /^[1-9],\s?[1-9]$/ || input =~ /^[1][0-4],\s?[1][0-4]$/ ||input =~ /^[1-9],\s?[1][0-4]$/ || input =~ /^[1][0-4],\s?[1-9]$/
         # x、yにキャスト
         posX, posY = parse_input_to_pos(input)
 
@@ -196,7 +196,7 @@ class Client
       # input = gets.to_s.chomp.downcase
       input = "#{testX},#{testY}"
       # 入力文字がx,yの形
-      if input =~ /^[1-8],\s?[1-8]$/
+      if input =~ /^[1-14],\s?[1-14]$/
         # x、yにキャスト
         posX, posY = parse_input_to_pos(input)
 
