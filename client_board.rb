@@ -12,10 +12,10 @@ class ClientBoard < BaseBoard
       .map { |f| f.join(' ') }
 
     print_range = 1..SQUARES - 2
-    puts "     #{print_range.to_a.join(' ')}"
+    puts "\n     #{print_range.to_a.join(' ')}"
     puts "   #{filed_marks.first}"
     filed_marks[print_range].each_with_index { |f, i| puts " #{i + 1} #{f}" }
-    puts "   #{filed_marks.last}"
+    puts "   #{filed_marks.last}\n\n"
   end
 
   # 指定マスに石が置けるか

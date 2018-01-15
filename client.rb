@@ -106,7 +106,6 @@ class Client
 
       # 盤面の描画
       @client_board.update(payload['field_diff'], payload['color'])
-      @client_board.pretty_print
     rescue StandardError => e
       # 失敗
       puts "回線が貧弱なので、通信に失敗したンゴ☺️ :#{e.message}"
