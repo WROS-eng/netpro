@@ -57,7 +57,7 @@ class Client
       puts "#{payload['username']}さんは#{payload['turn_order']}番目です。"
 
       # 盤面の描画
-      @client_board.pretty_print
+      # @client_board.pretty_print
     rescue StandardError
       # 失敗
       puts "回線が貧弱なので、通信に失敗したンゴ☺️ :#{__method__}"
