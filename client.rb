@@ -154,7 +154,7 @@ class Client
 
         # 空きマスかどうか
         unless @client_board.can_put_stone(posX, posY)
-          puts "そこは#{ClientBoard::MARK[:blank] }ではないので置けません"
+          puts "そこは#{ClientBoard::MARK[:blank]} ではないので置けません"
           next
         end
 
