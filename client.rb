@@ -13,7 +13,7 @@ class Client
   def initialize
     begin
       # localhostの20000ポートに接続
-      @port = TCPSocket.open('localhost', 20000)
+      @port = TCPSocket.open('172.20.10.4', 8888)
       puts "#{TAG} TCPSocket.open success!"
     rescue StandardError => e
       puts "#{TAG} TCPSocket.open failed :#{$ERROR_INFO}"
@@ -57,7 +57,7 @@ class Client
       order = '後攻' if payload['turn_order'] == 'second'
 
       # ユーザーデータの表示
-      puts "色:#{ClientBoard::COLOR.key(payload['color'])}"
+      puts "色:#{@client_board.parse_color_to_mark(payload['color'])}"
       puts "#{payload['username']}さんは#{order}です。"
 
       # 盤面の描画
@@ -306,7 +306,7 @@ class Client
       puts "\n結果発表"
 
       results.each{|result|
-        puts "#{BaseBoard::COLOR.key(result.color)} : #{result.stone_cnt} #{result.result}" }
+        puts "#{@client_board.parse_color_to_mark(result.color)} : #{result.stone_cnt}" }
 
       results
           .select{|result| result.result == 'win' }
