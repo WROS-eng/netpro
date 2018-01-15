@@ -29,24 +29,22 @@ loop do
   # ターン開始
   turn_count, player = gc.on_turn_start
 
+  is_finished = gc.finished_game?
+
   # 各プレイヤーに手番かどうかを送る
   gc.players.each { |p| server.notice_play_turn(
       p.socket, turn_count,
       is_play_turn: (p.id == player.id),
-      is_finish_game: gc.finished_game?,
+      is_finish_game: is_finished,
       turn_player_name: gc.curr_player.username,
       turn_player_color: gc.curr_player.color,
       prev_play_action: gc.prev_player.last_log)
   }
 
-  break if gc.finished_game?
+  break if is_finished  # 結果送信処理実装したら外す
 
   # 指し指令受取
   is_play, input_type, x, y, color, field_diff = server.on_play(player.socket, gc)
-
-  # ゲームが終了したか
-  # is_finish = gc.finished_game?
-  # break if is_finish  結果送信処理実装したら外す
 
   # 各プレイヤーに盤面情報送信
   gc.players.each { |p| server.notice_board_info(p.socket, p.username, input_type, x, y, color, field_diff) }
