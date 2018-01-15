@@ -1,7 +1,7 @@
 # netopro
 
 ## 超雑なイメージ
-![image](https://user-images.githubusercontent.com/12966452/33601139-b1561446-d9ee-11e7-9200-eadb88bfc2e9.png)
+![image](./out/uml/雑イメージ.png)
 
 ## 雑な説明
 - Serverがプレイヤー参加受付開始
