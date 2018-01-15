@@ -15,7 +15,7 @@ class Client
       # localhostの20000ポートに接続
       @port = TCPSocket.open('localhost', 20000)
       puts "#{TAG} TCPSocket.open success!"
-    rescue StandardError
+    rescue StandardError => e
       puts "#{TAG} TCPSocket.open failed :#{$ERROR_INFO}"
       raise e.message
     end
@@ -81,9 +81,9 @@ class Client
       payload = JSON.parse(json)
       # payloadの返却
       return payload['turn_count'], payload['is_play_turn'], payload['is_finish_game'], payload['turn_player_name'], payload['turn_player_color'], payload['prev_play_action']
-    rescue StandardError
+    rescue StandardError => e
       # 失敗
-      puts "回線が貧弱なので、通信に失敗したンゴ☺️ :#{__method__}"
+      puts "回線が貧弱なので、通信に失敗したンゴ☺️ :#{e.message}"
       raise '回線エラー'
     end
    end
