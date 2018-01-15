@@ -78,7 +78,7 @@ class Server
     begin
       # 受信
       request = receive(socket)
-      p request
+      puts request
 
       # パース
       result = JSON.parse(request)
@@ -109,7 +109,7 @@ class Server
     begin
       # 受信
       request = receive(socket)
-      p request
+      puts request
 
       # パース
       payload = JSON.parse(request)
