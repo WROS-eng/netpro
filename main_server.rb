@@ -25,11 +25,10 @@ player_orders = gc.start_game
 player_orders.each { |turn_order, p| server.notice_start_game(p.socket, turn_order, p.id, p.username, p.color) }
 
 # ゲームが終わるまで手番ループ
+is_finished = false
 loop do
   # ターン開始
   turn_count, player = gc.on_turn_start
-
-  is_finished = gc.finished_game?
 
   # 各プレイヤーに手番かどうかを送る
   gc.players.each { |p| server.notice_play_turn(
@@ -45,6 +44,8 @@ loop do
 
   # 指し指令受取
   is_play, input_type, x, y, color, field_diff = server.on_play(player.socket, gc)
+
+  is_finished = gc.finished_game?
 
   # 各プレイヤーに盤面情報送信
   gc.players.each { |p| server.notice_board_info(p.socket, p.username, input_type, x, y, color, field_diff) }

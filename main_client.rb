@@ -19,6 +19,7 @@ until is_finish_game
 
   turn_count, is_play_turn, is_finish_game, turn_player_name, turn_player_color, prev_play_action = client.on_notice_play_turn
   puts 'パスが選択されました😖' if prev_play_action == System::InputType::PASS
+  puts 'リタイアされました😂 ' if prev_play_action == System::InputType::RETIRE
 
   puts '-----------'*5
   client.client_board.pretty_print

@@ -43,7 +43,7 @@ class GameController
   #   パスが2回続いた
   #   置けなくなった
   def finished_game?
-    @curr_player.retired? || @curr_player.streak_pass? || !@board.put_place_exist?(next_player.color)
+     @curr_player.retired? || @curr_player.streak_pass? || !@board.put_place_exist?(next_player.color)
   end
 
   # 指した位置を盤面に反映
@@ -100,8 +100,9 @@ class GameController
 
   def result
     result = {}
-    if @curr_player.retired? || @curr_player.streak_pass?
-      result = @players.map{|p| [p.id, p.id==@curr_player.id ? 'lose' : 'win']}.to_h
+    p_player = prev_player
+    if p_player.retired? || p_player.streak_pass?
+      result = @players.map{|p| [p.id, p.id==p_player.id ? 'lose' : 'win']}.to_h
     else
       data = @players.map{|p| [p.id, get_stone_cnt(p.color)]}.to_h
       if data.values.uniq.size > 1
