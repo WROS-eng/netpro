@@ -53,8 +53,8 @@ class Server
   # socket : 接続したソケットインスタンス
   # turn_count : ターン数
   # is_play_turn : 手番かどうか
-  def notice_play_turn(socket, turn_count, is_play_turn:, is_finish_game:, turn_player_name:, turn_player_color:)
-    request = { turn_count: turn_count, is_play_turn: is_play_turn, is_finish_game: is_finish_game, turn_player_name:turn_player_name, turn_player_color:turn_player_color}
+  def notice_play_turn(socket, turn_count, is_play_turn:, is_finish_game:, turn_player_name:, turn_player_color:, prev_play_action:)
+    request = { turn_count: turn_count, is_play_turn: is_play_turn, is_finish_game: is_finish_game, turn_player_name:turn_player_name, turn_player_color:turn_player_color, prev_play_action: prev_play_action}
     send(socket, JSON.generate(request))
   end
 

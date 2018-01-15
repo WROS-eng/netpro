@@ -77,6 +77,11 @@ class GameController
     @turn += 1 if is_play
   end
 
+  # 前のターンプレイヤーを取得
+  def prev_player
+    @players[(@turn - 2) % @join_limit]
+  end
+
   # 現在のターンプレイヤーを取得
   def turn_player
     @players[(@turn - 1) % @join_limit]

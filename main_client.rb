@@ -17,14 +17,17 @@ is_finish_game = false
 
 until is_finish_game
 
-  puts "-----------"*5
+  turn_count, is_play_turn, is_finish_game, turn_player_name, turn_player_color, prev_play_action = client.on_notice_play_turn
+  puts 'パスが選択されました😖' if prev_play_action == System::InputType::PASS
+
+  puts '-----------'*5
   client.client_board.pretty_print
 
-  turn_count, is_play_turn, is_finish_game, turn_player_name, turn_player_color = client.on_notice_play_turn
   break if is_finish_game
 
+  puts ClientBoard::COLOR.map {|color| "#{ClientBoard::MARK[color[0]]} :#{client.client_board.get_stone_cnt(color[1])}"}.join(' vs ')
   puts "#{turn_count}ターン目です。"
-  puts "#{turn_player_name} (#{client.client_board.get_mark(turn_player_color)} )のターンです。"
+  puts "#{turn_player_name}(#{ClientBoard::MARK[ClientBoard::COLOR.key(turn_player_color)]} ) のターンです。"
 
   # 自分の番なら石を置く。相手ターンなら待つ
   if is_play_turn
@@ -40,6 +43,7 @@ until is_finish_game
       puts '１文字以上で入力して下さい'
     end
   else
+    puts "#{turn_player_name}が考え中...🤔 "
     client.wait
   end
 

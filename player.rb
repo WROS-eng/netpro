@@ -41,6 +41,11 @@ class Player
     @play_log.shift if @play_log.length > LOG_LENGTH
   end
 
+  # 最後のログ取得
+  def last_log
+    @play_log.last
+  end
+
   # 2連続でパスしたか
   def streak_pass?
     @play_log.last(2).count(System::InputType::PASS) == 2
@@ -48,6 +53,6 @@ class Player
 
   # リタイアしたか
   def retired?
-    @play_log.last == System::InputType::RETIRE
+    last_log == System::InputType::RETIRE
   end
 end

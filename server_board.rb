@@ -22,9 +22,4 @@ class ServerBoard < BaseBoard
       .map { |i| index2xy(i) }
       .any? { |f| get_flip_count(color, f[0], f[1]) > 0 }
   end
-
-  # その色の石の数を返す
-  def get_stone_cnt(color)
-    @field.select{ |f| f == color }.length
-  end
 end

@@ -137,4 +137,9 @@ class BaseBoard
 
     return flip_list
   end
+
+  # その色の石の数を返す
+  def get_stone_cnt(color)
+    @field.select{ |f| f == color }.length
+  end
 end
