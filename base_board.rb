@@ -14,7 +14,7 @@ class BaseBoard
   SQUARES = 10
 
   # 置いた位置からの向き
-  DIR = { up_left: -SQUARES, up: -SQUARES + 1, up_right: -SQUARES + 2, left: -1, center: 0, right: 1, down_left: SQUARES - 2, down: SQUARES - 1, down_right: SQUARES }.freeze
+  DIR = { up_left: -SQUARES - 1, up: -SQUARES, up_right: -SQUARES + 1, left: -1, center: 0, right: 1, down_left: SQUARES - 1, down: SQUARES , down_right: SQUARES + 1 }.freeze
 
   # コンストラクタ
   def initialize
