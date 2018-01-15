@@ -13,7 +13,7 @@ class Client
   def initialize
     begin
       # localhostの20000ポートに接続
-      @port = TCPSocket.open('172.20.10.4', 8888)
+      @port = TCPSocket.open('localhost', 20000)
       puts "#{TAG} TCPSocket.open success!"
     rescue StandardError => e
       puts "#{TAG} TCPSocket.open failed :#{$ERROR_INFO}"
