@@ -79,10 +79,8 @@ class Client
     begin
       # パース
       payload = JSON.parse(json)
-      puts "#{payload['turn_count']}ターン目です。"
-
       # payloadの返却
-      return payload['turn_count'], payload['is_play_turn'], payload['is_finish_game']
+      return payload['turn_count'], payload['is_play_turn'], payload['is_finish_game'], payload['turn_player_name'],payload['turn_player_color']
     rescue StandardError
       # 失敗
       puts "回線が貧弱なので、通信に失敗したンゴ☺️ :#{__method__}"

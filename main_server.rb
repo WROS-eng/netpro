@@ -30,7 +30,7 @@ loop do
   turn_count, player = gc.on_turn_start
 
   # 各プレイヤーに手番かどうかを送る
-  gc.players.each { |p| server.notice_play_turn(p.socket, turn_count, is_play_turn: (p.id == player.id), is_finish_game: gc.finished_game? ) }
+  gc.players.each { |p| server.notice_play_turn(p.socket, turn_count, is_play_turn: (p.id == player.id), is_finish_game: gc.finished_game? ,turn_player_name: gc.turn_player.username, turn_player_color: gc.turn_player.color) }
 
   break if gc.finished_game?
 

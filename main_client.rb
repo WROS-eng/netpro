@@ -20,14 +20,16 @@ until is_finish_game
   puts "-----------"*5
   client.client_board.pretty_print
 
-  _, is_play_turn, is_finish_game = client.on_notice_play_turn
-
+  turn_count, is_play_turn, is_finish_game, turn_player_name, turn_player_color = client.on_notice_play_turn
   break if is_finish_game
+
+  puts "#{turn_count}ターン目です。"
+  puts "#{turn_player_name} (#{BaseBoard::MARK[ClientBoard::COLOR.key(turn_player_color)]} )のターンです。"
 
   # 自分の番なら石を置く。相手ターンなら待つ
   if is_play_turn
     loop do
-      puts "#{client.client_player.username}(#{client.client_player.mark} )のターンです。置きたい場所を入力してください。'posX,posY' or 'pass' or 'retire'　で入力してください"
+      puts "置きたい場所を入力してください。'posX,posY' or 'pass' or 'retire'　で入力してください"
 
       # 石を置く処理
       client.play#(true)
@@ -38,7 +40,6 @@ until is_finish_game
       puts '１文字以上で入力して下さい'
     end
   else
-    puts '相手のターンです。'
     client.wait
   end
 
