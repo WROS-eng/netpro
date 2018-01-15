@@ -25,4 +25,8 @@ class ClientBoard < BaseBoard
   def can_put_stone(x, y)
     return get_square(x, y) == FIELD[:blank]
   end
+
+  def get_mark(color)
+    MARK[COLOR.key(color)]
+  end
 end

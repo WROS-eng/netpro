@@ -24,7 +24,7 @@ until is_finish_game
   break if is_finish_game
 
   puts "#{turn_count}ターン目です。"
-  puts "#{turn_player_name} (#{BaseBoard::MARK[ClientBoard::COLOR.key(turn_player_color)]} )のターンです。"
+  puts "#{turn_player_name} (#{client.client_board.get_mark(turn_player_color)} )のターンです。"
 
   # 自分の番なら石を置く。相手ターンなら待つ
   if is_play_turn

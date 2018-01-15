@@ -6,8 +6,4 @@ class ClientPlayer
     @username = username
     @color = color
   end
-
-  def mark
-    ClientBoard::MARK[ClientBoard::COLOR.key(color)]
-  end
 end
