@@ -7,5 +7,5 @@ module System
     NONE = -1    # 未定義の行動
   end
 
-  Result = Struct.new(:username, :result, :stone_cnt, :pass_cnt)
+  Result = Struct.new(:username, :result, :stone_cnt, :pass_cnt, :color)
 end

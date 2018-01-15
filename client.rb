@@ -17,6 +17,7 @@ class Client
       puts "#{TAG} TCPSocket.open success!"
     rescue StandardError
       puts "#{TAG} TCPSocket.open failed :#{$ERROR_INFO}"
+      raise e.message
     end
   end
 
@@ -30,7 +31,8 @@ class Client
   end
 
   def receive
-    p @port.gets
+    # p @port.gets
+    @port.gets
   end
 
   # ゲーム開始通知
@@ -38,13 +40,13 @@ class Client
   # id : プレイヤーid
   # username : プレイヤー名
   # color : プレイヤーの使う色
-  def on_noti_start_game
+  def on_notice_start_game
     # 受信
     json = receive
     begin
       # パース
       payload = JSON.parse(json)
-      p payload
+      # p payload
 
       # インスタンス生成
       @client_player = ClientPlayer.new(payload['username'], payload['color'])
@@ -70,14 +72,14 @@ class Client
   # turn_count : ターン数
   # is_play_turn : 手番かどうか
   # is_finish_game : ゲームが終わったかどうか
-  def on_noti_play_turn
+  def on_notice_play_turn
     # 受信
     json = receive
 
     begin
       # パース
       payload = JSON.parse(json)
-      p "#{payload['turn_count']}ターン目です。"
+      puts "#{payload['turn_count']}ターン目です。"
 
       # payloadの返却
       return payload['turn_count'], payload['is_play_turn'], payload['is_finish_game']
@@ -93,14 +95,14 @@ class Client
   # input_type : プレイヤーの行動
   # x, y : 置かれたx, y座標
   # username : ユーザー名
-  def on_noti_board_info
+  def on_notice_board_info
     # 受信
     json = receive
 
     begin
       # パース
       payload = JSON.parse(json)
-      puts payload.to_s
+      # puts payload.to_s
 
       # 盤面の描画
       @client_board.update(payload['field_diff'], payload['color'])
@@ -146,16 +148,14 @@ class Client
     loop do
       # 入力
       input = gets.to_s.chomp.downcase
-      p input
       # 入力文字がx,yの形
       if input =~ /^[1-8],\s?[1-8]$/
         # x、yにキャスト
         posX, posY = parse_input_to_pos(input)
-        p " x = #{posX} y = #{posY}"
 
         # 空きマスかどうか
         unless @client_board.can_put_stone(posX, posY)
-          puts "そこは#{ClientBoard::FIELD[:blank]}ではないので置けません"
+          puts "そこは#{ClientBoard::MARK[:blank] }ではないので置けません"
           next
         end
 
@@ -199,20 +199,17 @@ class Client
     testX,testY = 1,1
 
     loop do
-
       # 入力
       # input = gets.to_s.chomp.downcase
       input = "#{testX},#{testY}"
-      p input
       # 入力文字がx,yの形
       if input =~ /^[1-8],\s?[1-8]$/
         # x、yにキャスト
         posX, posY = parse_input_to_pos(input)
-        p " x = #{posX} y = #{posY}"
 
         # 空きマスかどうか
         unless @client_board.can_put_stone(posX, posY)
-          puts "そこは#{ClientBoard::FIELD[:blank]}ではないので置けません"
+          puts "そこは#{ClientBoard::MARK[:blank]} ではないので置けません"
           testX +=1
           next
         end
@@ -267,7 +264,7 @@ class Client
   # レスポンスのステータスをreturn
   # message : SuccessPlayなどのメッセージ
   # status  : 200なら成功
-  def on_noti_play_response
+  def on_notice_play_response
     # 受信
     json = receive
 
@@ -297,23 +294,31 @@ class Client
     posX, posY = pos[0].to_i, pos[1].to_i
   end
 
-  def on_noti_result_data
+  def on_notice_result_data
     puts "終わり！"
     json = receive
-    # begin
-    # パース
-    payload = JSON.parse(json)
-    p payload
-    results =  payload.map{|p| System::Result.new(*p.values)}
-    p results
+    begin
+      # パース
+      payload = JSON.parse(json)
+      # p payload
 
-    # 成功
-    results.each{|result| puts "デーた#{result.username}" }
+      results =  payload.map{|p| System::Result.new(*p.values)}
+      # p results
 
-  # rescue StandardError
+      # 成功 出力
+      puts "\n結果発表"
+
+      results.each{|result|
+        puts "#{BaseBoard::COLOR.key(result.color)} : #{result.stone_cnt} #{result.result}" }
+
+      results
+          .select{|result| result.result == 'win' }
+          .each {|win_player| puts "#{win_player.username} win!"}
+
+    rescue StandardError
     # 失敗　
-    # puts "回線が貧弱なので、通信に失敗したンゴ☺️ :#{__method__}"
-    # raise '回線エラー'
-    # end
+      puts "回線が貧弱なので、通信に失敗したンゴ☺️ :#{__method__}"
+      raise '回線エラー'
+    end
   end
 end
