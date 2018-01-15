@@ -142,4 +142,9 @@ class BaseBoard
   def get_stone_cnt(color)
     @field.select{ |f| f == color }.length
   end
+
+  # colorをMarkに変える変数
+  def parse_color_to_mark(color)
+    return MARK[COLOR.key(color)]
+  end
 end
