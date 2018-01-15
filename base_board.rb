@@ -2,16 +2,16 @@
 class BaseBoard
 
   # 色のマップリスト。とりあえずボードが持ってます
-  COLOR = { white: 1, black: -1 }.freeze
+  COLOR = { white: 1, black: -1 , yellow:2}.freeze
 
   # 盤面の状態マップリスト。
   FIELD = COLOR.merge(blank: 0, wall: 9).freeze
 
   # format用絵文字マップリスト
-  MARK = { white: '⚪️', black: '⚫️', blank: '❇️', wall: '⬛️' }.freeze
+  MARK = { white: '⚪️', black: '⚫️',yellow: '😤' , blank: '❇️', wall: '⬛️' }.freeze
 
   # 1辺のマス数(端1 + マス8 + 端1)
-  SQUARES = 10
+  SQUARES = 16
 
   # 置いた位置からの向き
   DIR = { up_left: -SQUARES - 1, up: -SQUARES, up_right: -SQUARES + 1, left: -1, center: 0, right: 1, down_left: SQUARES - 1, down: SQUARES , down_right: SQUARES + 1 }.freeze
@@ -25,11 +25,20 @@ class BaseBoard
   def reset
     # 盤面情報は1次元配列で管理
     @field = Array.new(SQUARES * SQUARES, FIELD[:wall])
-    (1..8).each { |x| (1..8).each { |y| set_square(x, y, FIELD[:blank]) } }
-    set_square(4, 4, COLOR[:white])
-    set_square(5, 5, COLOR[:white])
-    set_square(4, 5, COLOR[:black])
-    set_square(5, 4, COLOR[:black])
+
+    (1..SQUARES - 2).each { |x| (1..SQUARES - 2 ).each { |y| set_square(x, y, FIELD[:blank]) } }
+    center = (SQUARES - 2) / 2
+    center_upper = center + 1
+    center2upper = center + 2
+    center_lower = center + 1
+    center2lower = center + 1
+
+    set_square(center, center, COLOR[:white])
+    set_square(center_upper, center_upper, COLOR[:white])
+    set_square(center, center_upper, COLOR[:black])
+    set_square(center_upper, center, COLOR[:black])
+    set_square(center, center2upper, COLOR[:yellow])
+    set_square(center_upper, center2upper, COLOR[:yellow])
   end
 
   # 指定indexのマス情報を取得。

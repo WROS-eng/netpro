@@ -22,7 +22,7 @@ puts '参加上限に達しました。'
 player_orders = gc.start_game
 
 # 各プレイヤーへ開始通知
-player_orders.each { |turn_order, p| server.notice_start_game(p.socket, turn_order, p.id, p.username, p.color) }
+gc.players.each_with_index { |p, i| server.notice_start_game(p.socket, i + 1, p.id, p.username, p.color) }
 
 # ゲームが終わるまで手番ループ
 is_finished = false

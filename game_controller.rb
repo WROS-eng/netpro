@@ -34,7 +34,6 @@ class GameController
     @turn = 1
     @players.shuffle!
     @players.each_with_index { |player, i| player.register_color(ServerBoard::COLOR.values[i]) }
-    { first: @players[0], second: @players[1] }
   end
 
   # ゲームが終了したか

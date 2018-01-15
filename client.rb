@@ -52,13 +52,9 @@ class Client
       @client_player = ClientPlayer.new(payload['username'], payload['color'])
       @client_board = ClientBoard.new
 
-      # orderのキャスト
-      order = '先行'
-      order = '後攻' if payload['turn_order'] == 'second'
-
       # ユーザーデータの表示
       puts "色:#{@client_board.parse_color_to_mark(payload['color'])}"
-      puts "#{payload['username']}さんは#{order}です。"
+      puts "#{payload['username']}さんは#{payload['turn_order']}番目です。"
 
       # 盤面の描画
       @client_board.pretty_print
