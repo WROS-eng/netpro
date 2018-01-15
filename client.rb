@@ -302,11 +302,12 @@ class Client
     json = receive
     # begin
     # パース
-    # payload = JSON.payloadrse(json)
+    payload = JSON.parse(json)
    #a = A.new(*JSON[json].values)
-    result = System::Result.new(*json)
+    results =  payload.map{|p| System::Result.new(p)}
+    # result = System::Result.new(*json)
     # 成功
-    puts "デーた#{(result.username)}"
+    results.each{|result| puts "デーた#{result.username}" }
   # rescue StandardError
     # 失敗　
     # puts "回線が貧弱なので、通信に失敗したンゴ☺️ :#{__method__}"

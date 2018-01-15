@@ -100,7 +100,7 @@ class GameController
     else
       data = @players.map{|p| [p.id, get_stone_cnt(p.color)]}.to_h
       if data.values.uniq.size > 1
-        result = @players.map{|p| [p.id, p.id == data.max ? 'win' : 'lose']}.to_h
+        result = @players.map{|p| [p.id, p.id == data.max[0] ? 'win' : 'lose']}.to_h
       else
         result = @players.map{|p| [p.id, 'draw']}.to_h
       end

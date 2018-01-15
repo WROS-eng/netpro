@@ -51,5 +51,5 @@ end
 # 各プレイヤーにゲーム結果送信
 puts "終わり！"
 battle_data = gc.result
-results = gc.players.map{ |p| System::Result.new(p.username, battle_data[p.id], gc.get_stone_cnt(p.color), p.pass_cnt) }
+results = gc.players.map{ |p| System::Result.new(p.username, battle_data[p.id], gc.get_stone_cnt(p.color), p.pass_cnt).to_h.to_json }
 gc.players.each { |p| server.notice_result_data(p.socket, results) }
